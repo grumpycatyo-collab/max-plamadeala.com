@@ -1,12 +1,127 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import Header from '../components/Header.astro';
 ---
 
-<Layout>
-	<Welcome />
-	
+<Layout title="Max Plamadeala | Software Engineer">
+	<Header />
+	<main class="container">
+		<section class="hero" style="text-align: left;">
+			<h1>Hi, I'm Max Plamadeala</h1>
+			<p class="subtitle">Software Engineer & Problem Solver</p>
+			<p class="description" style="margin: 0;">
+				I build elegant solutions to complex problems, with a focus on performance and user experience.
+			</p>
+		</section>
+		
+		<section class="recent-posts">
+			<h2>Recent Articles</h2>
+			<ul class="post-list">
+				<li>
+					<span class="post-date">2023-06-15</span>
+					<a href="/articles/optimizing-react-performance">Optimizing React Performance</a>
+				</li>
+				<li>
+					<span class="post-date">2023-05-22</span>
+					<a href="/articles/serverless-architecture">Serverless Architecture Patterns</a>
+				</li>
+				<li>
+					<span class="post-date">2023-04-10</span>
+					<a href="/articles/typescript-best-practices">TypeScript Best Practices</a>
+				</li>
+			</ul>
+			<a href="/articles" class="view-all">View all articles →</a>
+		</section>
+	</main>
 </Layout>
+
+<style>
+  .hero {
+    padding: 4rem 0;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitle {
+    font-size: 1.25rem;
+    color: var(--accent-color);
+    margin-bottom: 1.5rem;
+  }
+
+  .description {
+    max-width: 600px;
+    margin: 0 auto;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--muted-color);
+  }
+
+  .recent-posts {
+    margin-top: 2rem;
+  }
+
+  .post-list {
+    list-style: none;
+    padding: 0;
+    margin: 2rem 0;
+  }
+
+  .post-list li {
+    display: flex;
+    align-items: baseline;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .post-date {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.85rem;
+    color: var(--muted-color);
+    min-width: 110px;
+    margin-right: 1.5rem;
+  }
+
+  .post-list a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .post-list a:hover {
+    color: var(--accent-color);
+  }
+
+  .view-all {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var(--accent-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  @media (max-width: 600px) {
+    .hero {
+      padding: 2rem 0;
+    }
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    .post-list li {
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .post-date {
+      min-width: unset;
+      margin-right: 0;
+    }
+  }
+</style>
