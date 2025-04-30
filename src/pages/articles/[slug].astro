@@ -1,17 +1,24 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry, render } from 'astro:content';
 
-// Generate a path for each article
 export async function getStaticPaths() {
   const articleEntries = await getCollection('articles');
+  
+  if (articleEntries.length === 0) {
+    return [];
+  }
+  
   return articleEntries.map(entry => ({
-    params: { slug: entry.slug },
+    params: { slug: entry.data.slug },
     props: { entry },
   }));
 }
 
 const { entry } = Astro.props;
-const { Content } = await entry.render();
+if (!entry) {
+  return Astro.redirect("/404");
+}
+const { Content } = await render(entry);
 ---
 
 <html>

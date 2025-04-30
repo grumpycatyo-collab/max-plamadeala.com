@@ -1,5 +1,4 @@
 ---
-// src/pages/articles.astro
 import { getCollection } from 'astro:content';
 
 const allArticles = await getCollection('articles');
@@ -18,7 +17,7 @@ const sortedArticles = allArticles.sort(
       {sortedArticles.map(article => (
         <li>
           <span>{article.data.publishDate.toISOString().split('T')[0]}</span>
-          <a href={`/articles/${article.slug}`}>{article.data.title}</a>
+          <a href={`/articles/${article.data.slug}`}>{article.data.title}</a>
         </li>
       ))}
     </ul>
