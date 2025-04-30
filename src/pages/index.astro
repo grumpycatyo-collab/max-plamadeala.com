@@ -1,7 +1,18 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
-import Callout from '../components/Callout.astro';
+import Callout from '../components/Callout.astro'
+;
+import { getCollection } from 'astro:content';
+
+// Get all articles and sort by date (newest first)
+const allArticles = await getCollection('articles');
+
+const sortedArticles = allArticles.sort(
+  (a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime()
+);
+const recentArticles = sortedArticles.slice(0, 3); // Get 3 most recent
+
 ---
 
 <Layout title="Max Plamadeala | Software Engineer">
@@ -21,23 +32,20 @@ import Callout from '../components/Callout.astro';
 		
 		<section class="recent-posts">
 			<h2>Recent Articles</h2>
-			None yet, but stay tuned!
-			<!-- <ul class="post-list">
-				<li>
-					<span class="post-date">2023-06-15</span>
-					<a href="/articles/optimizing-react-performance">Optimizing React Performance</a>
-				</li>
-				<li>
-					<span class="post-date">2023-05-22</span>
-					<a href="/articles/serverless-architecture">Serverless Architecture Patterns</a>
-				</li>
-				<li>
-					<span class="post-date">2023-04-10</span>
-					<a href="/articles/typescript-best-practices">TypeScript Best Practices</a>
-				</li>
-			</ul> -->
-			<!-- <a href="/articles" class="view-all">View all articles →</a> -->
-		</section>
+			{recentArticles.length > 0 ? (
+			  <ul class="post-list">
+				{recentArticles.map(article => (
+				  <li>
+					<span class="post-date">{article.data.publishDate.toISOString().split('T')[0]}</span>
+					<a href={`/articles/${article.slug}`}>{article.data.title}</a>
+				  </li>
+				))}
+			  </ul>
+			  <a href="/articles" class="view-all">View all articles →</a>
+			) : (
+			  <p>None yet, but stay tuned!</p>
+			)}
+		  </section>
 	</main>
 </Layout>
 

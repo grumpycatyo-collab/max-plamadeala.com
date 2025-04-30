@@ -1,0 +1,26 @@
+---
+// src/pages/articles.astro
+import { getCollection } from 'astro:content';
+
+const allArticles = await getCollection('articles');
+const sortedArticles = allArticles.sort(
+  (a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime()
+);
+---
+
+<html>
+  <head>
+    <title>All Articles</title>
+  </head>
+  <body>
+    <h1>All Articles</h1>
+    <ul>
+      {sortedArticles.map(article => (
+        <li>
+          <span>{article.data.publishDate.toISOString().split('T')[0]}</span>
+          <a href={`/articles/${article.slug}`}>{article.data.title}</a>
+        </li>
+      ))}
+    </ul>
+  </body>
+</html>
