@@ -1,8 +1,8 @@
 ---
-title: "Optimizing React Performance"
+title: "Optimizing Python Performance"
 publishDate: 2023-06-15
 description: "Tips for improving React application performance"
-slug: "optimizingf_shit"
+slug: "test_2"
 ---
 
-SHIT GOES HEREEE
+STUFF GOES HEREEE
