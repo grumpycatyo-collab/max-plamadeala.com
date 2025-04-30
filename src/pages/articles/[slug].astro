@@ -1,6 +1,7 @@
 ---
 import { getCollection, getEntry, render } from 'astro:content';
-
+import Header from '../../components/Header.astro';
+import Layout from '../../layouts/Layout.astro';
 export async function getStaticPaths() {
   const articleEntries = await getCollection('articles');
   
@@ -21,10 +22,8 @@ if (!entry) {
 const { Content } = await render(entry);
 ---
 
-<html>
-  <head>
-    <title>{entry.data.title}</title>
-  </head>
+<Layout title={entry.data.title}>
+<Header />
   <body>
     <article>
       <h1>{entry.data.title}</h1>
@@ -34,4 +33,4 @@ const { Content } = await render(entry);
       <Content />
     </article>
   </body>
-</html>
+  </Layout>

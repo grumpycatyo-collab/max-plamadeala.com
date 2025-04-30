@@ -1,5 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
+import Header from '../components/Header.astro';
+import Layout from '../layouts/Layout.astro';
 
 const allArticles = await getCollection('articles');
 const sortedArticles = allArticles.sort(
@@ -7,10 +9,8 @@ const sortedArticles = allArticles.sort(
 );
 ---
 
-<html>
-  <head>
-    <title>All Articles</title>
-  </head>
+<Layout title="All Articles">
+	<Header />
   <body>
     <h1>All Articles</h1>
     <ul>
@@ -22,4 +22,4 @@ const sortedArticles = allArticles.sort(
       ))}
     </ul>
   </body>
-</html>
+</Layout>   

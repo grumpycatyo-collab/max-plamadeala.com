@@ -5,13 +5,12 @@ import Callout from '../components/Callout.astro'
 ;
 import { getCollection } from 'astro:content';
 
-// Get all articles and sort by date (newest first)
 const allArticles = await getCollection('articles');
-console.log(allArticles);
+
 const sortedArticles = allArticles.sort(
   (a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime()
 );
-const recentArticles = sortedArticles.slice(0, 3); // Get 3 most recent
+const recentArticles = sortedArticles.slice(0, 3); 
 
 ---
 
