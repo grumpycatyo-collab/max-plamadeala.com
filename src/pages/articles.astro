@@ -11,15 +11,112 @@ const sortedArticles = allArticles.sort(
 
 <Layout title="All Articles">
 	<Header />
-  <body>
-    <h1>All Articles</h1>
-    <ul>
-      {sortedArticles.map(article => (
-        <li>
-          <span>{article.data.publishDate.toISOString().split('T')[0]}</span>
-          <a href={`/articles/${article.data.slug}`}>{article.data.title}</a>
-        </li>
-      ))}
-    </ul>
-  </body>
-</Layout>   
+  <main class="container">
+    <div class="articles-section">
+      <h1>All Articles</h1>
+      {sortedArticles.length > 0 ? (
+        <ul class="articles-list">
+          {sortedArticles.map(article => (
+            <li>
+              <time datetime={article.data.publishDate.toISOString()}>
+                {article.data.publishDate.toISOString().split('T')[0]}
+              </time>
+              <a href={`/articles/${article.data.slug}`}>
+                {article.data.title}
+                {article.data.description && (
+                  <span class="description">{article.data.description}</span>
+                )}
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="no-articles">No articles published yet. Check back soon!</p>
+      )}
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .articles-section {
+    padding: 2rem 0;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    font-weight: 500;
+    color: var(--text-color);
+  }
+
+  .articles-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .articles-list li {
+    display: flex;
+    align-items: baseline;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .articles-list li:first-child {
+    border-top: 1px solid var(--border-color);
+  }
+
+  time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--muted-color);
+    min-width: 110px;
+    margin-right: 1.5rem;
+  }
+
+  .articles-list a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .articles-list a:hover {
+    color: var(--accent-color);
+  }
+
+  .description {
+    font-size: 0.9rem;
+    color: var(--muted-color);
+    font-weight: normal;
+  }
+
+  .no-articles {
+    color: var(--muted-color);
+    font-size: 1.1rem;
+  }
+
+  @media (max-width: 600px) {
+    .articles-section {
+      padding: 1rem 0;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .articles-list li {
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    time {
+      min-width: unset;
+      margin-right: 0;
+    }
+  }
+</style>   

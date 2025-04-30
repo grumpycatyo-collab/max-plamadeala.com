@@ -23,14 +23,119 @@ const { Content } = await render(entry);
 ---
 
 <Layout title={entry.data.title}>
-<Header />
-  <body>
-    <article>
+  <Header />
+  <main class="container">
+    <article class="article-content">
       <h1>{entry.data.title}</h1>
       <time datetime={entry.data.publishDate.toISOString()}>
         {entry.data.publishDate.toISOString().split('T')[0]}
       </time>
       <Content />
     </article>
-  </body>
-  </Layout>
+  </main>
+</Layout>
+
+<style>
+  .article-content {
+    padding: 2rem 0;
+    max-width: 100%;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-color);
+  }
+
+  time {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--muted-color);
+    margin-bottom: 2rem;
+  }
+
+  :global(.article-content h2) {
+    font-size: 1.75rem;
+    margin: 2rem 0 1rem;
+    font-weight: 500;
+    color: var(--text-color);
+  }
+
+  :global(.article-content h3) {
+    font-size: 1.5rem;
+    margin: 1.5rem 0 1rem;
+    font-weight: 500;
+    color: var(--text-color);
+  }
+
+  :global(.article-content p) {
+    margin: 1rem 0;
+    line-height: 1.6;
+    color: var(--text-color);
+  }
+
+  :global(.article-content a) {
+    color: var(--accent-color);
+    text-decoration: none;
+  }
+
+  :global(.article-content a:hover) {
+    text-decoration: underline;
+  }
+
+  :global(.article-content code) {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9em;
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    background-color: rgba(128, 128, 128, 0.1);
+  }
+
+  :global(.article-content pre) {
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: rgba(128, 128, 128, 0.1);
+    overflow-x: auto;
+  }
+
+  :global(.article-content pre code) {
+    padding: 0;
+    background-color: transparent;
+  }
+
+  :global(.article-content ul), :global(.article-content ol) {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+  }
+
+  :global(.article-content li) {
+    margin: 0.5rem 0;
+  }
+
+  :global(.article-content blockquote) {
+    margin: 1.5rem 0;
+    padding-left: 1rem;
+    border-left: 4px solid var(--accent-color);
+    color: var(--muted-color);
+  }
+
+  @media (max-width: 600px) {
+    .article-content {
+      padding: 1rem 0;
+    }
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    :global(.article-content h2) {
+      font-size: 1.5rem;
+    }
+
+    :global(.article-content h3) {
+      font-size: 1.25rem;
+    }
+  }
+</style>
