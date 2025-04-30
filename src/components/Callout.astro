@@ -1,0 +1,62 @@
+---
+interface Props {
+  href?: string;
+  text: string;
+  icon?: 'lightbulb' | 'info' | 'warning';
+}
+
+const { href, text, icon = 'lightbulb' } = Astro.props;
+
+const icons = {
+  lightbulb: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M12 2a8 8 0 0 0-8 8c0 1.892.402 3.13 1.5 4.5L7 17h10l1.5-2.5c1.098-1.37 1.5-2.608 1.5-4.5a8 8 0 0 0-8-8z"></path></svg>`,
+  info: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`,
+  warning: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`
+};
+---
+
+{href ? (
+  <a href={href} class="callout">
+    <div class="icon" set:html={icons[icon]} />
+    <span>{text}</span>
+  </a>
+) : (
+  <div class="callout">
+    <div class="icon" set:html={icons[icon]} />
+    <span>{text}</span>
+  </div>
+)}
+
+<style>
+  .callout {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    margin: 1rem 0;
+    background-color: var(--bg-secondary);
+    border-left: 4px solid var(--accent-color);
+    border-radius: 0 0.5rem 0.5rem 0;
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: background-color 0.2s ease;
+    width: fit-content;
+  }
+
+  .callout:hover {
+    background-color: var(--bg-tertiary);
+  }
+
+  .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-color);
+    flex-shrink: 0;
+  }
+
+  .icon svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+</style> 

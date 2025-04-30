@@ -1,4 +1,6 @@
 ---
+import Callout from './Callout.astro';
+
 const pathname = new URL(Astro.request.url).pathname;
 const currentPath = pathname.slice(1); // remove the first "/"
 ---
@@ -6,16 +8,13 @@ const currentPath = pathname.slice(1); // remove the first "/"
 <header>
   <div class="container header-container">
     <div class="logo">
-      <a href="/">Max Plamadeala</a>
+      <a href="/">@grumpycatyo-collab</a>
     </div>
     <nav>
       <ul>
         <li class={currentPath === "about" ? "active" : ""}>
           <a href="/about">About me</a>
         </li>
-        <li class={currentPath === "articles" ? "active" : ""}>
-            <a href="/articles">CV</a>
-          </li>
         <li class={currentPath === "projects" ? "active" : ""}>
           <a href="/projects">Projects</a>
         </li>
@@ -69,6 +68,7 @@ const currentPath = pathname.slice(1); // remove the first "/"
     list-style: none;
     padding: 0;
     margin: 0;
+    align-items: center;
   }
 
   nav a {
