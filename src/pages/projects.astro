@@ -1,0 +1,154 @@
+---
+import { getCollection, render } from 'astro:content';
+import Header from '../components/Header.astro';
+import Layout from '../layouts/Layout.astro';
+
+const allProjects = await getCollection('projects');
+const sortedProjects = allProjects.sort(
+  (a, b) => a.data.title.localeCompare(b.data.title)
+);
+
+const projectsWithContent = await Promise.all(
+  sortedProjects.map(async (project) => {
+    const { Content } = await render(project);
+    return { ...project, Content };
+  })
+);
+---
+
+<Layout title="Projects">
+  <Header />
+  <main class="container">
+    <div class="projects-section">
+      <h1>Projects</h1>
+      {projectsWithContent.length > 0 ? (
+        <ul class="projects-list">
+          {projectsWithContent.map(project => (
+            <li>
+              <div class="project-header">
+                <h2 class="project-title">
+                  <a href={project.data.link} target="_blank" rel="noopener noreferrer">
+                    {project.data.title}
+                  </a>
+                </h2>
+              </div>
+              <div class="project-content">
+                <project.Content />
+              </div>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="no-projects">No projects published yet. Check back soon!</p>
+      )}
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .projects-section {
+    padding: 2rem 0;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    font-weight: 500;
+    color: var(--text-color);
+  }
+
+  .projects-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .projects-list li {
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .projects-list li:first-child {
+    border-top: 1px solid var(--border-color);
+  }
+
+  .project-header {
+    margin-bottom: 0.5rem;
+  }
+
+  .project-title {
+    font-size: 1.25rem;
+    margin: 0;
+  }
+
+  .project-title a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .project-title a:hover {
+    color: var(--accent-color);
+  }
+
+  .project-content {
+    color: var(--muted-color);
+  }
+
+  /* Make sure Markdown content renders nicely */
+  :global(.project-content p) {
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  :global(.project-content strong) {
+    color: var(--text-color);
+  }
+
+  :global(.project-content a) {
+    color: var(--accent-color);
+    text-decoration: none;
+  }
+
+  :global(.project-content a:hover) {
+    text-decoration: underline;
+  }
+
+
+  :global(.project-content code) {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9em;
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    background-color: rgba(128, 128, 128, 0.1);
+  }
+
+  :global(.project-content pre) {
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: rgba(128, 128, 128, 0.1);
+    overflow-x: auto;
+  }
+
+  :global(.project-content pre code) {
+    padding: 0;
+    background-color: transparent;
+  }
+
+  .no-projects {
+    color: var(--muted-color);
+    font-size: 1.1rem;
+  }
+
+  @media (max-width: 600px) {
+    .projects-section {
+      padding: 1rem 0;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+  }
+</style>

@@ -6,12 +6,17 @@ import Callout from '../components/Callout.astro'
 import { getCollection } from 'astro:content';
 
 const allArticles = await getCollection('articles');
+const allProjects = await getCollection('projects');
 
 const sortedArticles = allArticles.sort(
   (a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime()
 );
 const recentArticles = sortedArticles.slice(0, 3); 
 
+const sortedProjects = allProjects.sort(
+  (a, b) => a.data.title.localeCompare(b.data.title)
+);
+const recentProjects = sortedProjects.slice(0, 3);
 ---
 
 <Layout title="Max Plamadeala | Software Engineer">
@@ -73,21 +78,30 @@ const recentArticles = sortedArticles.slice(0, 3);
     color: var(--muted-color);
   }
 
-  .recent-posts {
+  .recent-posts, .recent-projects {
     margin-top: 2rem;
   }
 
-  .post-list {
+  .post-list, .project-list {
     list-style: none;
     padding: 0;
     margin: 2rem 0;
   }
 
-  .post-list li {
+  .post-list li, .project-list li {
     display: flex;
-    align-items: baseline;
     padding: 1rem 0;
     border-bottom: 1px solid var(--border-color);
+  }
+
+  .post-list li {
+    align-items: baseline;
+  }
+
+  .project-list li a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
   }
 
   .post-date {
@@ -98,15 +112,21 @@ const recentArticles = sortedArticles.slice(0, 3);
     margin-right: 1.5rem;
   }
 
-  .post-list a {
+  .post-list a, .project-list a {
     color: var(--text-color);
     text-decoration: none;
     font-weight: 500;
     transition: color 0.2s;
   }
 
-  .post-list a:hover {
+  .post-list a:hover, .project-list a:hover {
     color: var(--accent-color);
+  }
+
+  .project-description {
+    font-size: 0.9rem;
+    color: var(--muted-color);
+    font-weight: normal;
   }
 
   .view-all {
