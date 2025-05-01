@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import Header from '../components/Header.astro';
 import Layout from '../layouts/Layout.astro';
 
@@ -7,21 +7,34 @@ const allProjects = await getCollection('projects');
 const sortedProjects = allProjects.sort(
   (a, b) => a.data.title.localeCompare(b.data.title)
 );
+
+const projectsWithContent = await Promise.all(
+  sortedProjects.map(async (project) => {
+    const { Content } = await render(project);
+    return { ...project, Content };
+  })
+);
 ---
 
 <Layout title="Projects">
-	<Header />
+  <Header />
   <main class="container">
     <div class="projects-section">
       <h1>Projects</h1>
-      {sortedProjects.length > 0 ? (
+      {projectsWithContent.length > 0 ? (
         <ul class="projects-list">
-          {sortedProjects.map(project => (
+          {projectsWithContent.map(project => (
             <li>
-              <a href={project.data.link} target="_blank" rel="noopener noreferrer">
-                {project.data.title}
-                <span class="description">{project.data.description}</span>
-              </a>
+              <div class="project-header">
+                <h2 class="project-title">
+                  <a href={project.data.link} target="_blank" rel="noopener noreferrer">
+                    {project.data.title}
+                  </a>
+                </h2>
+              </div>
+              <div class="project-content">
+                <project.Content />
+              </div>
             </li>
           ))}
         </ul>
@@ -51,7 +64,7 @@ const sortedProjects = allProjects.sort(
   }
 
   .projects-list li {
-    padding: 1rem 0;
+    padding: 1.5rem 0;
     border-bottom: 1px solid var(--border-color);
   }
 
@@ -59,24 +72,68 @@ const sortedProjects = allProjects.sort(
     border-top: 1px solid var(--border-color);
   }
 
-  .projects-list a {
+  .project-header {
+    margin-bottom: 0.5rem;
+  }
+
+  .project-title {
+    font-size: 1.25rem;
+    margin: 0;
+  }
+
+  .project-title a {
     color: var(--text-color);
     text-decoration: none;
     font-weight: 500;
     transition: color 0.2s;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
   }
 
-  .projects-list a:hover {
+  .project-title a:hover {
     color: var(--accent-color);
   }
 
-  .description {
-    font-size: 0.9rem;
+  .project-content {
     color: var(--muted-color);
-    font-weight: normal;
+  }
+
+  /* Make sure Markdown content renders nicely */
+  :global(.project-content p) {
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  :global(.project-content strong) {
+    color: var(--text-color);
+  }
+
+  :global(.project-content a) {
+    color: var(--accent-color);
+    text-decoration: none;
+  }
+
+  :global(.project-content a:hover) {
+    text-decoration: underline;
+  }
+
+
+  :global(.project-content code) {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9em;
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    background-color: rgba(128, 128, 128, 0.1);
+  }
+
+  :global(.project-content pre) {
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: rgba(128, 128, 128, 0.1);
+    overflow-x: auto;
+  }
+
+  :global(.project-content pre code) {
+    padding: 0;
+    background-color: transparent;
   }
 
   .no-projects {
@@ -94,4 +151,4 @@ const sortedProjects = allProjects.sort(
       margin-bottom: 1.5rem;
     }
   }
-</style> 
+</style>
