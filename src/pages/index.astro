@@ -1,8 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
-import Callout from '../components/Callout.astro'
-;
+import Callout from '../components/Callout.astro';
+import StarButton from '../components/StarButton.astro';
+
 import { getCollection } from 'astro:content';
 
 const allArticles = await getCollection('articles');
@@ -41,8 +42,14 @@ const recentProjects = sortedProjects.slice(0, 3);
 				{recentArticles.map(article => (
 				  <li>
 					<span class="post-date">{article.data.publishDate.toISOString().split('T')[0]}</span>
-					<a href={`/articles/${article.data.slug}`}>{article.data.title}</a>
-				  </li>
+					<div class="article-info">
+                <a href={`/articles/${article.data.slug}`}>{article.data.title}</a>
+                <StarButton 
+                  articleSlug={article.data.slug} 
+                  featured={article.data.featured}
+                />
+              </div>
+              </li>
 				))}
 			  </ul>
 			  <a href="/articles" class="view-all">View all articles →</a>
@@ -127,6 +134,12 @@ const recentProjects = sortedProjects.slice(0, 3);
     font-size: 0.9rem;
     color: var(--muted-color);
     font-weight: normal;
+  }
+  .article-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex: 1;
   }
 
   .view-all {
