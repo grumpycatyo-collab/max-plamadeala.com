@@ -179,9 +179,17 @@ const currentPath = pathname.slice(1); // remove the first "/"
     nav ul {
       gap: 1rem;
     }
+    
+    .header-controls {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
 
     #theme-toggle {
-      position: absolute;
+      position: static;
       top: 1.5rem;
       right: 1.5rem;
     }
