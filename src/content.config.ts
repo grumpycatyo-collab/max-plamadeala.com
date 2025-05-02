@@ -8,6 +8,7 @@ const articlesCollection = defineCollection({
     publishDate: z.date(),
     slug: z.string(),
     description: z.string().optional(),
+    // Indicates whether the article is featured or highlighted.
     featured: z.boolean().optional().default(false), 
   }),
 });
