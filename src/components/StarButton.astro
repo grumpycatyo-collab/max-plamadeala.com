@@ -34,7 +34,7 @@ const { articleSlug, featured = false } = Astro.props;
   
   .star-button:hover {
     transform: scale(1.1);
-    color: #FFD700;
+    color: var(--accent-color);
   }
   
   .star-button.featured {
@@ -45,8 +45,12 @@ const { articleSlug, featured = false } = Astro.props;
     fill: #FFD700;
   }
   
+  .star-button.starred {
+    color: var(--accent-color);
+  }
+  
   .star-button.starred svg {
-    fill: #FFD700;
+    fill: var(--accent-color);
   }
   
   .star-icon {
