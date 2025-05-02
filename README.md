@@ -1,48 +1,120 @@
-# Astro Starter Kit: Basics
+# My thing
 
-```sh
-npm create astro@latest -- --template basics
+A personal website built with **Astro**, featuring articles, projects, and a blog with customizable content.
+
+## Description
+
+This is a personal portfolio website for Max Plamadeala (@grumpycatyo-collab) that showcases:
+
+- Personal information and a brief bio
+- Projects with descriptions and links
+- Articles/blog posts with star/featuring functionality
+- Dark mode support
+- Responsive design for all devices
+
+The website is built using *Astro with a content-driven approach*, making it easy to add new projects and articles without modifying the core codebase (good stuff).
+
+## Application Flow
+
+1. **Homepage**: 
+   - Introduction section with a brief bio
+   - Recent articles section
+   - Call-to-action to view full articles list
+
+2. **About Page**:
+   - Detailed information about Max
+   - Content is editable via Markdown files
+
+3. **Projects Page**:
+   - List of projects with title and description
+   - Each project links to its GitHub repository
+
+4. **Articles Section**:
+   - List view of all articles with dates and descriptions
+   - Article detail pages with full content
+   - Star functionality to mark favorite articles
+
+## Project Structure
+
 ```
-
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
+max-plamadeala.com/
+├── public/               # Static files
 ├── src/
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
+│   ├── components/       # Reusable components (Header, StarButton, etc.)
+│   ├── layouts/          # Page layouts
+│   ├── pages/            # Page components and routes
+│   └── content.config.ts # Content collection definitions
+├── content/
+│   ├── articles/         # Markdown files for articles
+│   ├── projects/         # Markdown files for projects
+│   └── pages/            # Markdown files for pages like About
 └── package.json
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## Getting Started
 
-## 🧞 Commands
+1. Clone the repository:
+```sh
+git clone https://github.com/grumpycatyo-collab/max-plamadeala.git
+cd max-plamadeala
+```
 
-All commands are run from the root of the project, from a terminal:
+2. Install dependencies:
+```sh
+npm install
+```
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+3. Run the development server:
+```sh
+npm run dev
+```
 
-## 👀 Want to learn more?
+4. Build for production:
+```sh
+npm run build
+```
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## Adding Content
+
+### New Article
+
+Create a new Markdown file in `content/articles/` with the following structure:
+
+```md
+---
+title: "Your Article Title"
+publishDate: 2023-06-15
+description: "Brief description of your article"
+slug: "unique-slug"
+featured: false
+---
+
+Your article content goes here...
+```
+
+### New Project
+
+Create a new Markdown file in `content/projects/` with the following structure:
+
+```md
+---
+title: "Project Title"
+link: "https://github.com/username/project"
+slug: "project-slug"
+---
+
+Project description goes here...
+```
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Author
+
+Max Plamadeala (@grumpycatyo-collab)
+
+---
+
+Feel free to use this website as a template for your own personal site!
+But please, be original ;).
