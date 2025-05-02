@@ -3,7 +3,7 @@ import { getCollection, getEntry, render } from 'astro:content';
 import Header from '../../components/Header.astro';
 import Layout from '../../layouts/Layout.astro';
 import StarButton from '../../components/StarButton.astro';
-
+import Giscus from '../../components/Giscus.astro';
 export async function getStaticPaths() {
   const articleEntries = await getCollection('articles');
   
@@ -39,6 +39,7 @@ const { Content } = await render(entry);
         {entry.data.publishDate.toISOString().split('T')[0]}
       </time>
       <Content />
+      <Giscus />
     </article>
   </main>
 </Layout>

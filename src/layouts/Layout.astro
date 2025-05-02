@@ -15,16 +15,20 @@ const { title, description = "Max Plamadeala's personal website" } = Astro.props
     <link rel="icon" type="image/svg+xml" href="/grumpy_cat.jpeg" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
+    <script is:inline>
+      const savedTheme = localStorage.getItem("theme") || 
+                         (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.classList.toggle("dark", savedTheme === "dark");
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+	  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
     <title>{title}</title>
   </head>
   <body>
     <slot />
     <script>
-      // Theme switcher functionality
       const theme = (() => {
         if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
           return localStorage.getItem("theme");
@@ -42,6 +46,60 @@ const { title, description = "Max Plamadeala's personal website" } = Astro.props
       }
 
       window.localStorage.setItem("theme", theme as string);
+    // Giscus theme sync
+    const syncGiscusTheme = () => {
+      const theme = (() => {
+        if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
+          return localStorage.getItem("theme");
+        }
+        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          return "dark";
+        }
+        return "light";
+      })();
+      
+      const iframe = document.querySelector('.giscus-frame') as HTMLIFrameElement;
+      if (iframe) {
+        const giscusTheme = theme === "dark" ? "dark" : "light";
+        
+        if (iframe.contentWindow) {
+          iframe.contentWindow.postMessage(
+            { giscus: { setConfig: { theme: giscusTheme } } },
+            'https://giscus.app'
+          );
+        }
+      }
+    };
+
+    const observer = new MutationObserver(() => {
+      syncGiscusTheme();
+    });
+
+    observer.observe(document.documentElement, { 
+      attributes: true, 
+      attributeFilter: ['class'] 
+    });
+
+    window.addEventListener('storage', (event) => {
+      if (event.key === 'theme') {
+        syncGiscusTheme();
+      }
+    });
+
+    window.addEventListener('load', () => {
+      const giscusFrame = document.querySelector('.giscus-frame');
+      if (giscusFrame) {
+        giscusFrame.addEventListener('load', syncGiscusTheme);
+      } else {
+        setTimeout(() => {
+          const retryFrame = document.querySelector('.giscus-frame');
+          if (retryFrame) {
+            retryFrame.addEventListener('load', syncGiscusTheme);
+          }
+        }, 1000);
+      }
+    });
+    // End Giscus theme sync
     </script>
   </body>
 </html>
@@ -97,4 +155,15 @@ const { title, description = "Max Plamadeala's personal website" } = Astro.props
   main {
     padding: 3rem 0;
   }
+  :root {
+  --giscus-border-color: var(--border-color);
+  }
+
+  .giscus-frame {
+    margin-top: 1rem;
+  }
+
+  .dark .giscus-frame {
+    color-scheme: dark;
+}
 </style>
