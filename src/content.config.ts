@@ -20,7 +20,15 @@ const projectsCollection = defineCollection({
   }),
 });
 
+const pagesCollection = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./content/pages" }),
+  schema: z.object({
+    title: z.string(),
+  }),
+});
+
 export const collections = {
   'articles': articlesCollection,
   'projects': projectsCollection,
+  'pages': pagesCollection,
 }; 

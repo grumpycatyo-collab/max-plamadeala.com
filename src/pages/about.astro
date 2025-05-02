@@ -1,12 +1,72 @@
 ---
 import Header from '../components/Header.astro';
 import Layout from '../layouts/Layout.astro';
+import { getEntry, render } from 'astro:content';
+
+const entry = await getEntry('pages', 'about');
+if (!entry) {
+	return Astro.redirect('/404');
+}
+const { Content } = await render(entry);
 ---
 
-
-<Layout title="About Me">
+<Layout title={entry.data.title}>
 	<Header />
-  <main class="container">
-
-  </main>
+	<main class="container">
+		<article class="about-content">
+			<h1>{entry.data.title}</h1>
+			<Content />
+		</article>
+	</main>
 </Layout>
+
+<style>
+	.about-content {
+		padding: 2rem 0;
+		max-width: 100%;
+	}
+
+	h1 {
+		font-size: 2.5rem;
+		margin-bottom: 2rem;
+		font-weight: 500;
+		color: var(--text-color);
+	}
+
+	:global(.about-content p) {
+		margin: 1rem 0;
+		line-height: 1.6;
+		color: var(--text-color);
+	}
+
+	:global(.about-content a) {
+		color: var(--accent-color);
+		text-decoration: none;
+	}
+
+
+  :global(.about-content a:hover) {
+    text-decoration: underline;
+  }
+
+  :global(.about-content code) {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9em;
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    background-color: rgba(128, 128, 128, 0.1);
+  }
+
+  :global(.about-content pre) {
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: rgba(128, 128, 128, 0.1);
+    overflow-x: auto;
+  }
+
+  :global(.about-content pre code) {
+    padding: 0;
+    background-color: transparent;
+  }
+
+</style>
