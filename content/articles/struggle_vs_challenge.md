@@ -39,7 +39,7 @@ const allArticles = await getCollection('articles');
 And that's all 💥. You have everything done. Isn't it cool?
 
 
-> Besides `Astro`, as memory, I used local storage, so the web-site is 100% client-sided, and if you inspect the website and navigate to `Application` -> `LocalStorage`, you'll every related info stored in there (mainly YOUR starred article).
+> Besides `Astro`, as memory, I used local storage, so the web-site is 100% client-sided, and if you inspect the website and navigate to `Application` -> `LocalStorage`, you'll see every related info stored in there (mainly YOUR starred articles if you have any).
 
 
 ## Lessons learnt
