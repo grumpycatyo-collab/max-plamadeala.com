@@ -2,6 +2,8 @@
 import { getCollection, getEntry, render } from 'astro:content';
 import Header from '../../components/Header.astro';
 import Layout from '../../layouts/Layout.astro';
+import StarButton from '../../components/StarButton.astro';
+
 export async function getStaticPaths() {
   const articleEntries = await getCollection('articles');
   
@@ -26,7 +28,13 @@ const { Content } = await render(entry);
   <Header />
   <main class="container">
     <article class="article-content">
-      <h1>{entry.data.title}</h1>
+      <div class="article-header">
+        <h1>{entry.data.title}</h1>
+        <StarButton 
+          articleSlug={entry.data.slug} 
+          featured={entry.data.featured}
+        />
+      </div>
       <time datetime={entry.data.publishDate.toISOString()}>
         {entry.data.publishDate.toISOString().split('T')[0]}
       </time>
@@ -39,6 +47,12 @@ const { Content } = await render(entry);
   .article-content {
     padding: 2rem 0;
     max-width: 100%;
+  }
+  
+  .article-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
 
   h1 {

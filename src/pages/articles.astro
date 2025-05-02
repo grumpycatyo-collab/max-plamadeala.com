@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Header from '../components/Header.astro';
 import Layout from '../layouts/Layout.astro';
+import StarButton from '../components/StarButton.astro';
 
 const allArticles = await getCollection('articles');
 const sortedArticles = allArticles.sort(
@@ -21,12 +22,19 @@ const sortedArticles = allArticles.sort(
               <time datetime={article.data.publishDate.toISOString()}>
                 {article.data.publishDate.toISOString().split('T')[0]}
               </time>
-              <a href={`/articles/${article.data.slug}`}>
-                {article.data.title}
-                {article.data.description && (
-                  <span class="description">{article.data.description}</span>
-                )}
-              </a>
+              <div class="article-info">
+                <a href={`/articles/${article.data.slug}`}>
+                  {article.data.title}
+                  {article.data.description && (
+                    <span class="description">{article.data.description}</span>
+                  )}
+                </a>
+                <StarButton 
+                  articleSlug={article.data.slug} 
+                  featured={article.data.featured}
+                />
+              </div>
+
             </li>
           ))}
         </ul>
@@ -97,6 +105,13 @@ const sortedArticles = allArticles.sort(
   .no-articles {
     color: var(--muted-color);
     font-size: 1.1rem;
+  }
+
+  .article-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex: 1;
   }
 
   @media (max-width: 600px) {

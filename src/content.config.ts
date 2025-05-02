@@ -8,6 +8,7 @@ const articlesCollection = defineCollection({
     publishDate: z.date(),
     slug: z.string(),
     description: z.string().optional(),
+    featured: z.boolean().optional().default(false), // For you to mark featured articles
   }),
 });
 
