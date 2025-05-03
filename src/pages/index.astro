@@ -24,14 +24,12 @@ const recentProjects = sortedProjects.slice(0, 3);
 	<Header />
 	<main class="container">
 		<section class="hero" style="text-align: left;">
-			<h1>Hi! I'm Max 👋</h1>
-			<p class="subtitle">Software Engineer & Critical Thinker</p>
-			<p class="description" style="margin: 0;">
-				I like working and learning new stuff every day. Love social interactions and creating things all night long.
-				<br>
-				P.S: A minor detail about me: My mom calls me "Maxim" when angry, so please don't call me "Maxim"
-			</p>
-
+			<h1>H3llo! 👋</h1>
+      <p class="description" style="margin: 0;">
+        I'm Max. In here you can find my projects, articles, and some random stuff I like to do.
+       <br /> 
+       Get in touch: <a href="mailto:me@max-plamadeala.com" class="email-link"><code>me@max-plamadeala.com</code></a>
+      </p>
 			<Callout href="/cv_maxim_plamadeala.pdf" text="CV" icon="lightbulb" target="_blank" rel="noopener noreferrer" />
 		</section>
 		
@@ -149,6 +147,25 @@ const recentProjects = sortedProjects.slice(0, 3);
     text-decoration: none;
     font-size: 0.9rem;
     font-weight: 500;
+  }
+
+  .email-link {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .email-link code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9em;
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    background-color: rgba(128, 128, 128, 0.1);
+    transition: background-color 0.2s;
+    color: var(--text-color);
+  }
+
+  .email-link:hover code {
+    background-color: rgba(128, 128, 128, 0.2);
   }
 
   @media (max-width: 600px) {
