@@ -11,8 +11,7 @@ const {
   ogImage 
 } = Astro.props;
 
-const dynamicOgImagePath = ogImage || `/api/og-image?title=${encodeURIComponent(title)}`;
-
+const dynamicOgImagePath = ogImage || `/api/og/${encodeURIComponent(title)}`;
 
 let canonicalURL;
 let imageURL;
