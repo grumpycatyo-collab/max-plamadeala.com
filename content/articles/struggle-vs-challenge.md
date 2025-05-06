@@ -2,7 +2,7 @@
 title: "Transforming a struggle into a personal challenge"
 publishDate: 2025-05-02
 description: "How I pushed myself to code a personal web-site due to an university lab."
-slug: "struggle_vs_challenge"
+slug: "struggle-vs-challenge"
 featured: true
 ---
 

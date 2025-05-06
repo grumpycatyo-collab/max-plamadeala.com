@@ -6,7 +6,10 @@ const articlesCollection = defineCollection({
   schema: z.object({
     title: z.string(),
     publishDate: z.date(),
-    slug: z.string(),
+    slug: z.string()
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, {
+      message: 'Slug must contain only lowercase letters, numbers, and hyphens'
+    }),
     description: z.string().optional(),
     // Indicates whether the article is featured or highlighted.
     featured: z.boolean().optional().default(false), 

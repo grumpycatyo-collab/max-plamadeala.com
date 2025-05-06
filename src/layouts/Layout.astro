@@ -2,9 +2,27 @@
 interface Props {
   title: string;
   description?: string;
+  ogImage?: string;
 }
 
-const { title, description = "Max Plamadeala's personal website" } = Astro.props;
+const { 
+  title, 
+  description = "Max Plamadeala's personal website", 
+  ogImage = "/grumpy_cat.jpeg" 
+} = Astro.props;
+
+
+let canonicalURL;
+let imageURL;
+
+try {
+  const baseUrl = import.meta.env.SITE || "https://max-plamadeala.com";
+  canonicalURL = new URL(Astro.url.pathname, baseUrl);
+  imageURL = new URL(ogImage, baseUrl).toString();
+} catch (e) {
+  canonicalURL = Astro.url.pathname;
+  imageURL = ogImage.startsWith('http') ? ogImage : `https://max-plamadeala.com${ogImage}`;
+}
 ---
 
 <!doctype html>
@@ -13,8 +31,24 @@ const { title, description = "Max Plamadeala's personal website" } = Astro.props
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/grumpy_cat.jpeg" />
+    <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={imageURL} />
+    <meta property="og:site_name" content="@grumpycatyo-collab" />
+
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={imageURL} />
+    <meta property="twitter:creator" content="@grumpycatyo-collab" />
+
     <script is:inline>
       const savedTheme = localStorage.getItem("theme") || 
                          (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
