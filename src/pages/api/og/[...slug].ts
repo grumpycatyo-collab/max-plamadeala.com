@@ -1,22 +1,19 @@
 import type { APIRoute } from 'astro';
-import { createCanvas, loadImage, registerFont } from 'canvas';
+import { createCanvas, registerFont } from 'canvas';
 import path from 'path';
+import { getCollection } from 'astro:content';
+
 export const prerender = true;
 
-export const GET: APIRoute = async ({ request }) => {
-  // Register fonts
+// Function to generate OG image
+async function generateOGImage(title: string) {
   try {
     registerFont(path.resolve('public', 'fonts', 'CalSans-Regular.ttf'), { family: 'Cal Sans'});
     registerFont(path.resolve('public', 'fonts', 'JetBrainsMono-Regular.ttf'), { family: 'JetBrainsMono' });
     registerFont(path.resolve('public', 'fonts', 'Inter-VariableFont_opsz,wght.ttf'), { family: 'Inter'});
   } catch (e) {
     console.error('Error registering fonts:', e);
-    // Continue with system fonts if custom fonts fail to load
   }
-
-  const url = new URL(request.url);
-  const title = url.searchParams.get('title') || '@grumpycatyo-collab';
-  const subtitle = url.searchParams.get('subtitle') || '';
   
   const width = 1200;
   const height = 630;
@@ -31,11 +28,13 @@ export const GET: APIRoute = async ({ request }) => {
     '#b8e6b8', // Soft green
     '#e7c6e2'  // Soft lavender
   ];
-  // Randomly select a background color
-  const randomColor = bgColors[Math.floor(Math.random() * bgColors.length)];
+  
+  // Use a fixed color based on the title to ensure consistency
+  const colorIndex = Math.abs(title.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)) % bgColors.length;
+  const bgColor = bgColors[colorIndex];
   
   // Set the background color
-  ctx.fillStyle = randomColor;
+  ctx.fillStyle = bgColor;
   ctx.fillRect(0, 0, width, height);
   
   // Title - big, bold, black text centered
@@ -75,8 +74,39 @@ export const GET: APIRoute = async ({ request }) => {
   ctx.textAlign = 'center';
   ctx.fillText('max-plamadeala.com | @grumpycatyo-collab', width / 2, height - 80);
   
-  // Return the PNG
-  return new Response(canvas.toBuffer(), {
+  return canvas.toBuffer();
+}
+
+// Generate static paths for all articles plus a default
+export async function getStaticPaths() {
+  const articles = await getCollection('articles');
+  
+  return [
+    { params: { slug: 'default' } },
+    ...articles.map(article => ({
+      params: { slug: article.data.slug }
+    }))
+  ];
+}
+
+// Handle the OG image request
+export const GET: APIRoute = async ({ params }) => {
+  // Get the title based on slug
+  let title = '@grumpycatyo-collab';
+  
+  if (params.slug && params.slug !== 'default') {
+    // Find the article by slug
+    const articles = await getCollection('articles');
+    const article = articles.find(a => a.data.slug === params.slug);
+    
+    if (article) {
+      title = article.data.title;
+    }
+  }
+  
+  const imageBuffer = await generateOGImage(title);
+  
+  return new Response(imageBuffer, {
     headers: {
       'Content-Type': 'image/png',
       'Cache-Control': 'public, max-age=86400', // Cache for 24 hours
