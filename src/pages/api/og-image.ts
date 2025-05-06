@@ -50,6 +50,7 @@ export const get: APIRoute = async ({ request }) => {
   return new Response(canvas.toBuffer(), {
     headers: {
       'Content-Type': 'image/png',
+      'Cache-Control': 'public, max-age=86400', // Cache for 24 hours
     },
   });
 };
