@@ -2,7 +2,7 @@
 title: "Bash as a super tool"
 publishDate: 2025-05-02
 description: "Things I learnt about bash."
-slug: "bash_super_tool"
+slug: "bash-super-tool"
 featured: false
 ---
 

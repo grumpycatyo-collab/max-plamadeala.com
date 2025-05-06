@@ -5,6 +5,8 @@ interface Props {
 }
 
 const { title, description = "Max Plamadeala's personal website" } = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <!doctype html>
@@ -13,8 +15,14 @@ const { title, description = "Max Plamadeala's personal website" } = Astro.props
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/grumpy_cat.jpeg" />
+    <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
+
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+
     <script is:inline>
       const savedTheme = localStorage.getItem("theme") || 
                          (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
