@@ -1,9 +1,19 @@
 import type { APIRoute } from 'astro';
-import { createCanvas, loadImage } from 'canvas';
+import { createCanvas, loadImage, registerFont } from 'canvas';
 import path from 'path';
 export const prerender = false;
 
 export const GET: APIRoute = async ({ request }) => {
+  // Register fonts
+  try {
+    registerFont(path.resolve('public', 'fonts', 'CalSans-Regular.ttf'), { family: 'Cal Sans'});
+    registerFont(path.resolve('public', 'fonts', 'JetBrainsMono-Regular.ttf'), { family: 'JetBrainsMono' });
+    registerFont(path.resolve('public', 'fonts', 'Inter-VariableFont_opsz,wght.ttf'), { family: 'Inter'});
+  } catch (e) {
+    console.error('Error registering fonts:', e);
+    // Continue with system fonts if custom fonts fail to load
+  }
+
   const url = new URL(request.url);
   const title = url.searchParams.get('title') || '@grumpycatyo-collab';
   const subtitle = url.searchParams.get('subtitle') || '';
@@ -47,8 +57,8 @@ export const GET: APIRoute = async ({ request }) => {
     console.error('Error loading avatar image:', e);
   }
   
-  // Title - big, bold, black text aligned to the right
-  ctx.font = 'bold 72px sans-serif';
+  // Title - big, bold, black text aligned to the right using Inter font
+  ctx.font = 'bold 72px "Cal Sans", sans-serif';
   ctx.fillStyle = '#000000'; // Black text
   ctx.textAlign = 'left';
   
@@ -78,8 +88,8 @@ export const GET: APIRoute = async ({ request }) => {
     y += 80; // Adjust spacing between lines
   }
   
-  // Add website URL at bottom right aligned with the title
-  ctx.font = '36px sans-serif';
+  // Add website URL at bottom right aligned with the title using Roboto Mono
+  ctx.font = '36px "JetBrainsMono", monospace';
   ctx.fillStyle = '#000000'; // Black text for URL too
   ctx.textAlign = 'left';
   ctx.fillText('max-plamadeala.com', textX, height - 80);
