@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { createCanvas, loadImage, registerFont } from 'canvas';
 import path from 'path';
-export const prerender = false;
+export const prerender = true;
 
 export const GET: APIRoute = async ({ request }) => {
   // Register fonts
