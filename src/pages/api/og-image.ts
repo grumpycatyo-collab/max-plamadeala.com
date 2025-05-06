@@ -1,4 +1,3 @@
-// src/pages/api/og-image.ts
 import type { APIRoute } from 'astro';
 import { createCanvas, loadImage } from 'canvas';
 import path from 'path';
@@ -7,76 +6,32 @@ export const prerender = false;
 export const GET: APIRoute = async ({ request }) => {
   const url = new URL(request.url);
   const title = url.searchParams.get('title') || '@grumpycatyo-collab';
-  const subtitle = url.searchParams.get('subtitle') || 'Software Engineer';
-  const theme = url.searchParams.get('theme') || 'dark'; // Allow theme parameter
+  const subtitle = url.searchParams.get('subtitle') || '';
   
   const width = 1200;
   const height = 630;
   const canvas = createCanvas(width, height);
   const ctx = canvas.getContext('2d');
   
-  // Colors matching your website
-  const colors = {
-    dark: {
-      bg: '#121212',
-      text: '#f3f4f6',
-      accent: '#60a5fa',
-      muted: '#9ca3af',
-      border: '#374151'
-    },
-    light: {
-      bg: '#ffffff',
-      text: '#121212',
-      accent: '#3a86ff',
-      muted: '#6b7280',
-      border: '#e5e7eb'
-    }
-  };
-  
-  const currentTheme = theme === 'light' ? colors.light : colors.dark;
-  
-  // Background
-  ctx.fillStyle = currentTheme.bg;
+  // Bright yellow background like in the image
+  ctx.fillStyle = '#ffde03'; // Bright yellow
   ctx.fillRect(0, 0, width, height);
-  
-  // Add subtle grid pattern to match website aesthetic
-  ctx.strokeStyle = currentTheme.border;
-  ctx.lineWidth = 1;
-  ctx.globalAlpha = 0.1;
-  
-  // Draw subtle grid lines
-  // const gridSize = 50;
-  // for (let x = 0; x <= width; x += gridSize) {
-  //   ctx.beginPath();
-  //   ctx.moveTo(x, 0);
-  //   ctx.lineTo(x, height);
-  //   ctx.stroke();
-  // }
-  
-  // for (let y = 0; y <= height; y += gridSize) {
-  //   ctx.beginPath();
-  //   ctx.moveTo(0, y);
-  //   ctx.lineTo(width, y);
-  //   ctx.stroke();
-  // }
-  
-  ctx.globalAlpha = 1;
   
   // Try to load avatar
   try {
     const avatarPath = path.resolve('public', 'grumpy_cat.jpeg');
     const avatar = await loadImage(avatarPath);
     
-    // Draw circular avatar with border
-    const avatarSize = 200;
-    const avatarX = width / 2;
-    const avatarY = 180;
+    // Draw avatar on the left side with a white border/sticker effect
+    const avatarSize = 350;
+    const avatarX = 220;
+    const avatarY = height / 2;
     
-    // Draw accent-colored ring around avatar
+    // White background for sticker effect
     ctx.save();
     ctx.beginPath();
-    ctx.arc(avatarX, avatarY, avatarSize / 2 + 8, 0, Math.PI * 2, true);
-    ctx.fillStyle = currentTheme.accent;
+    ctx.arc(avatarX, avatarY, avatarSize / 2 + 15, 0, Math.PI * 2, true);
+    ctx.fillStyle = 'white';
     ctx.fill();
     ctx.restore();
     
@@ -92,13 +47,14 @@ export const GET: APIRoute = async ({ request }) => {
     console.error('Error loading avatar image:', e);
   }
   
-  // Title - use a font similar to your site's headings
-  ctx.font = 'bold 70px sans-serif';
-  ctx.fillStyle = currentTheme.text;
-  ctx.textAlign = 'center';
+  // Title - big, bold, black text aligned to the right
+  ctx.font = 'bold 72px sans-serif';
+  ctx.fillStyle = '#000000'; // Black text
+  ctx.textAlign = 'left';
   
   // Handle long titles by splitting text
-  const maxWidth = width - 200; // Leave some margin
+  const textX = 450; // Position text to the right of the avatar
+  const maxWidth = width - textX - 50; // Leave some margin
   const words = title.split(' ');
   let line = '';
   let lines = [];
@@ -116,26 +72,18 @@ export const GET: APIRoute = async ({ request }) => {
   lines.push(line);
   
   // Draw each line of text
-  let y = 350;
+  let y = height / 2 - ((lines.length - 1) * 80) / 2;
   for (let i = 0; i < lines.length; i++) {
-    ctx.fillText(lines[i], width / 2, y);
+    ctx.fillText(lines[i].trim(), textX, y);
     y += 80; // Adjust spacing between lines
   }
   
-  // Subtitle
+  // Add website URL at bottom right aligned with the title
   ctx.font = '36px sans-serif';
-  ctx.fillStyle = currentTheme.muted;
-  ctx.fillText(subtitle, width / 2, y + 40);
+  ctx.fillStyle = '#000000'; // Black text for URL too
+  ctx.textAlign = 'left';
+  ctx.fillText('max-plamadeala.com', textX, height - 80);
   
-  // Add website URL at bottom
-  ctx.font = '28px monospace'; // Use monospace font like JetBrains Mono
-  ctx.fillStyle = currentTheme.accent;
-  ctx.fillText('max-plamadeala.com', width / 2, height - 40);
-  
-  // Add accent color accent bar at top
-  const accentBarHeight = 12;
-  ctx.fillStyle = currentTheme.accent;
-  ctx.fillRect(0, 0, width, accentBarHeight);
   
   // Return the PNG
   return new Response(canvas.toBuffer(), {
