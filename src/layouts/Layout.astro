@@ -8,8 +8,10 @@ interface Props {
 const { 
   title, 
   description = "Max Plamadeala's personal website", 
-  ogImage = "/og-image.png" 
+  ogImage 
 } = Astro.props;
+
+const dynamicOgImagePath = ogImage || `/api/og-image?title=${encodeURIComponent(title)}`;
 
 
 let canonicalURL;
@@ -18,10 +20,17 @@ let imageURL;
 try {
   const baseUrl = import.meta.env.SITE || "https://max-plamadeala.com";
   canonicalURL = new URL(Astro.url.pathname, baseUrl);
-  imageURL = new URL(ogImage, baseUrl).toString();
+  
+  // If ogImage is provided and is already a full URL, use it directly
+  // Otherwise, construct the complete URL for the dynamic OG image
+  imageURL = ogImage && ogImage.startsWith('http') 
+    ? ogImage 
+    : new URL(dynamicOgImagePath, baseUrl).toString();
 } catch (e) {
   canonicalURL = Astro.url.pathname;
-  imageURL = ogImage.startsWith('http') ? ogImage : `https://max-plamadeala.com${ogImage}`;
+  imageURL = ogImage && ogImage.startsWith('http') 
+    ? ogImage 
+    : `https://max-plamadeala.com${dynamicOgImagePath}`;
 }
 ---
 
