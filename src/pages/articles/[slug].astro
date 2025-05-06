@@ -23,7 +23,7 @@ if (!entry) {
 }
 const { Content } = await render(entry);
 
-const ogImage = `/api/og-image?title=${encodeURIComponent(entry.data.title)}&subtitle=Article by @grumpycatyo-collab`;
+const ogImage = `/api/og/${encodeURIComponent(entry.data.title)}`;
 
 ---
 
