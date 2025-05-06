@@ -23,48 +23,29 @@ export const GET: APIRoute = async ({ request }) => {
   const canvas = createCanvas(width, height);
   const ctx = canvas.getContext('2d');
   
-  // Bright yellow background like in the image
-  ctx.fillStyle = '#ffde03'; // Bright yellow
+  // Define 5 bright colors to choose from
+  const bgColors = [
+    '#ffe642', // Soft yellow
+    '#f0a0a0', // Soft pink/red
+    '#a0d2f0', // Soft blue
+    '#b8e6b8', // Soft green
+    '#e7c6e2'  // Soft lavender
+  ];
+  // Randomly select a background color
+  const randomColor = bgColors[Math.floor(Math.random() * bgColors.length)];
+  
+  // Set the background color
+  ctx.fillStyle = randomColor;
   ctx.fillRect(0, 0, width, height);
   
-  // Try to load avatar
-  try {
-    const avatarPath = path.resolve('public', 'grumpy_cat.jpeg');
-    const avatar = await loadImage(avatarPath);
-    
-    // Draw avatar on the left side with a white border/sticker effect
-    const avatarSize = 350;
-    const avatarX = 220;
-    const avatarY = height / 2;
-    
-    // White background for sticker effect
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(avatarX, avatarY, avatarSize / 2 + 15, 0, Math.PI * 2, true);
-    ctx.fillStyle = 'white';
-    ctx.fill();
-    ctx.restore();
-    
-    // Draw circular avatar
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(avatarX, avatarY, avatarSize / 2, 0, Math.PI * 2, true);
-    ctx.closePath();
-    ctx.clip();
-    ctx.drawImage(avatar, avatarX - avatarSize / 2, avatarY - avatarSize / 2, avatarSize, avatarSize);
-    ctx.restore();
-  } catch (e) {
-    console.error('Error loading avatar image:', e);
-  }
-  
-  // Title - big, bold, black text aligned to the right using Inter font
+  // Title - big, bold, black text centered
   ctx.font = 'bold 72px "Cal Sans", sans-serif';
   ctx.fillStyle = '#000000'; // Black text
-  ctx.textAlign = 'left';
+  ctx.textAlign = 'center';
   
   // Handle long titles by splitting text
-  const textX = 450; // Position text to the right of the avatar
-  const maxWidth = width - textX - 50; // Leave some margin
+  const textX = width / 2; // Center text
+  const maxWidth = width - 100; // Leave some margin
   const words = title.split(' ');
   let line = '';
   let lines = [];
@@ -88,12 +69,11 @@ export const GET: APIRoute = async ({ request }) => {
     y += 80; // Adjust spacing between lines
   }
   
-  // Add website URL at bottom right aligned with the title using Roboto Mono
+  // Add website URL and nickname at bottom
   ctx.font = '36px "JetBrainsMono", monospace';
   ctx.fillStyle = '#000000'; // Black text for URL too
-  ctx.textAlign = 'left';
-  ctx.fillText('max-plamadeala.com', textX, height - 80);
-  
+  ctx.textAlign = 'center';
+  ctx.fillText('max-plamadeala.com | @grumpycatyo-collab', width / 2, height - 80);
   
   // Return the PNG
   return new Response(canvas.toBuffer(), {
