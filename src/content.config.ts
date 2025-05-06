@@ -11,6 +11,7 @@ const articlesCollection = defineCollection({
       message: 'Slug must contain only lowercase letters, numbers, and hyphens'
     }),
     description: z.string().optional(),
+    // Indicates whether the article is featured or highlighted.
     featured: z.boolean().optional().default(false), 
   }),
 });
