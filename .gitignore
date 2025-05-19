@@ -16,3 +16,4 @@
 *.egg-info
 *.egg
 french_phrases.txt
+.env
