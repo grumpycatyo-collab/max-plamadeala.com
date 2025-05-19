@@ -10,6 +10,7 @@ client = OpenAI(
 
 phrases_list = read_from_file()
 
+
 def call_openai() -> str:
     response = client.responses.create(
         model="gpt-4o-mini",
