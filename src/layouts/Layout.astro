@@ -11,7 +11,7 @@ const {
   ogImage 
 } = Astro.props;
 
-const dynamicOgImagePath = ogImage || `/api/og/${encodeURIComponent(title)}`;
+const dynamicOgImagePath = `/api/og/${encodeURIComponent(title)}`;
 
 let canonicalURL;
 let imageURL;
@@ -50,6 +50,7 @@ try {
     <meta property="og:image" content={imageURL} />
     <meta property="og:site_name" content="@grumpycatyo-collab" />
 
+    
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content={canonicalURL} />
     <meta property="twitter:title" content={title} />
