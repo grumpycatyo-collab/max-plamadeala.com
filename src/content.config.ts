@@ -22,6 +22,7 @@ const projectsCollection = defineCollection({
     title: z.string(),
     link: z.string(),
     slug: z.string(),
+    imagePath: z.string().optional(),
   }),
 });
 
