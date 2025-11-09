@@ -14,11 +14,11 @@ const currentPath = pathname.slice(1); // remove the first "/"
         <li class={currentPath === "about" ? "active" : ""}>
           <a href="/about">About me</a>
         </li>
+         <li class={currentPath === "articles" ? "active" : ""}>
+          <a href="/articles">Articles</a>
+        </li>
         <li class={currentPath === "projects" ? "active" : ""}>
           <a href="/projects">Projects</a>
-        </li>
-        <li class={currentPath === "articles" ? "active" : ""}>
-          <a href="/articles">Articles</a>
         </li>
       </ul>
     </nav>
