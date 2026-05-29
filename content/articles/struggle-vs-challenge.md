@@ -45,7 +45,5 @@ And that's all 💥. You have everything done. Isn't it cool?
 ## Lessons learnt
 
 Try to use life struggles or things you don't want to do as opportunities for your personal development.
-Transform `lab6` into `a personal web-site` or `gym` into `a place where I can have fun with my bros`.
-
 
 Thanks for the attention, and please do comment or leave feedback in case you want to share your experience or want to correct me on something related to `Astro`.
