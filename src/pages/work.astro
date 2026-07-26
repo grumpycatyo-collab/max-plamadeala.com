@@ -1,6 +1,5 @@
 ---
 import { getCollection, render } from 'astro:content';
-import Header from '../components/Header.astro';
 import Layout from '../layouts/Layout.astro';
 
 const allProjects = await getCollection('projects');
@@ -17,8 +16,7 @@ const projectsWithContent = await Promise.all(
 ---
 
 <Layout title="Work">
-  <Header />
-  <main class="container">
+  <main class="container" id="main-content">
     <div class="projects-section">
       <h1>Work</h1>
       {projectsWithContent.length > 0 ? (

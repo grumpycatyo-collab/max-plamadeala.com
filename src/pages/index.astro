@@ -1,6 +1,5 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
 import Callout from '../components/Callout.astro';
 import StarButton from '../components/StarButton.astro';
 
@@ -21,8 +20,7 @@ const recentProjects = sortedProjects.slice(0, 3);
 ---
 
 <Layout title="@grumpycatyo-collab">
-	<Header />
-	<main class="container">
+	<main class="container" id="main-content">
 		<section class="hero" style="text-align: left;">
 			<h1><em>Hello!</em>👋</h1>
       <p class="description" style="margin: 0;">
