@@ -1,12 +1,16 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
-import StarButton from '../components/StarButton.astro';
+import RevisedBadge from '../components/RevisedBadge.astro';
+import { readingTime } from '../lib/readingTime';
 
 const allArticles = await getCollection('articles');
 const sortedArticles = allArticles.sort(
   (a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime()
 );
+
+const originalEntries = await getCollection('articlesOriginal');
+const originalSlugs = new Set(originalEntries.map(o => o.data.slug));
 ---
 
 <Layout title="Writing">
@@ -18,21 +22,18 @@ const sortedArticles = allArticles.sort(
           {sortedArticles.map(article => (
             <li>
               <time datetime={article.data.publishDate.toISOString()}>
-                {article.data.publishDate.toISOString().split('T')[0]}
+                {article.data.publishDate.getFullYear()}
               </time>
-              <div class="article-info">
-                <a href={`/writing/${article.data.slug}`}>
-                  {article.data.title}
-                  {article.data.description && (
-                    <span class="description">{article.data.description}</span>
-                  )}
-                </a>
-                <StarButton 
-                  articleSlug={article.data.slug} 
-                  featured={article.data.featured}
-                />
+              <div class="title-block">
+                <span class="title-with-badge">
+                  <a href={`/writing/${article.data.slug}`}>{article.data.title}</a>
+                  <RevisedBadge slug={article.data.slug} hasOriginal={originalSlugs.has(article.data.slug)} />
+                </span>
+                {article.data.description && (
+                  <span class="description">{article.data.description}</span>
+                )}
               </div>
-
+              <span class="reading-time">{readingTime(article.body ?? '')}</span>
             </li>
           ))}
         </ul>
@@ -65,17 +66,37 @@ const sortedArticles = allArticles.sort(
   }
 
   .articles-list li {
-    display: flex;
+    display: grid;
+    grid-template-columns: 3rem 1fr auto;
     align-items: baseline;
-    padding: 0.75rem 0;
+    gap: 1rem;
+    padding: 0.6rem 0;
   }
 
   time {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: var(--muted-color);
-    min-width: 110px;
-    margin-right: 1.5rem;
+  }
+
+  .title-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+
+  .title-with-badge {
+    display: flex;
+    align-items: baseline;
+    gap: 0.25rem;
+  }
+
+  .reading-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--muted-color);
+    white-space: nowrap;
   }
 
   .articles-list a {
@@ -83,9 +104,6 @@ const sortedArticles = allArticles.sort(
     text-decoration: none;
     font-weight: 500;
     transition: color 0.2s;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
   }
 
   .articles-list a:hover {
@@ -103,13 +121,6 @@ const sortedArticles = allArticles.sort(
     font-size: 1.1rem;
   }
 
-  .article-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex: 1;
-  }
-
   @media (max-width: 600px) {
     .articles-section {
       padding: 1rem 0;
@@ -121,13 +132,12 @@ const sortedArticles = allArticles.sort(
     }
 
     .articles-list li {
-      flex-direction: column;
-      gap: 0.25rem;
+      grid-template-columns: 2.25rem 1fr auto;
+      gap: 0.5rem;
     }
 
-    time {
-      min-width: unset;
-      margin-right: 0;
+    .reading-time {
+      display: none;
     }
   }
 </style>   

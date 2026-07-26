@@ -1,0 +1,40 @@
+---
+interface Props {
+  slug: string;
+  hasOriginal: boolean;
+}
+
+const { slug, hasOriginal } = Astro.props;
+---
+
+{hasOriginal && (
+  <a
+    class="revised-badge"
+    href={`/writing/${slug}/original`}
+    title="This article has been revised — click to see the original version"
+    aria-label="This article has been revised — click to see the original version"
+  >
+    v2.0
+  </a>
+)}
+
+<style>
+  .revised-badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7em;
+    font-weight: 500;
+    line-height: 1;
+    padding: 0.25em 0.4em;
+    border-radius: 4px;
+    background-color: rgba(128, 128, 128, 0.15);
+    color: var(--muted-color);
+    text-decoration: none;
+    vertical-align: middle;
+  }
+
+  .revised-badge:hover {
+    color: #fff;
+    background-color: var(--accent-color);
+  }
+</style>
