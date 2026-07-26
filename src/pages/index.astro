@@ -41,7 +41,7 @@ const recentProjects = sortedProjects.slice(0, 3);
 				  <li>
 					<span class="post-date">{article.data.publishDate.toISOString().split('T')[0]}</span>
 					<div class="article-info">
-                <a href={`/articles/${article.data.slug}`}>{article.data.title}</a>
+                <a href={`/writing/${article.data.slug}`}>{article.data.title}</a>
                 <StarButton 
                   articleSlug={article.data.slug} 
                   featured={article.data.featured}
@@ -50,7 +50,7 @@ const recentProjects = sortedProjects.slice(0, 3);
               </li>
 				))}
 			  </ul>
-			  <a href="/articles" class="view-all">View all articles →</a>
+			  <a href="/writing" class="view-all">View all articles →</a>
 			) : (
 			  <p>None yet, but stay tuned!</p>
 			)}

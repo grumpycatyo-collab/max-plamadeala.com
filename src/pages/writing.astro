@@ -10,11 +10,11 @@ const sortedArticles = allArticles.sort(
 );
 ---
 
-<Layout title="All Articles">
-	<Header />
+<Layout title="Writing">
+  <Header />
   <main class="container">
     <div class="articles-section">
-      <h1>All Articles</h1>
+      <h1>Writing</h1>
       {sortedArticles.length > 0 ? (
         <ul class="articles-list">
           {sortedArticles.map(article => (
@@ -23,7 +23,7 @@ const sortedArticles = allArticles.sort(
                 {article.data.publishDate.toISOString().split('T')[0]}
               </time>
               <div class="article-info">
-                <a href={`/articles/${article.data.slug}`}>
+                <a href={`/writing/${article.data.slug}`}>
                   {article.data.title}
                   {article.data.description && (
                     <span class="description">{article.data.description}</span>

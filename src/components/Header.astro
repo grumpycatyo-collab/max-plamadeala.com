@@ -1,8 +1,7 @@
 ---
-import Callout from './Callout.astro';
-
 const pathname = new URL(Astro.request.url).pathname;
 const currentPath = pathname.slice(1); // remove the first "/"
+const section = currentPath.split('/')[0];
 ---
 <header>
   <div class="container header-container">
@@ -11,14 +10,14 @@ const currentPath = pathname.slice(1); // remove the first "/"
     </div>
     <nav>
       <ul>
-        <li class={currentPath === "about" ? "active" : ""}>
-          <a href="/about">About me</a>
+        <li class={section === "work" ? "active" : ""}>
+          <a href="/work">Work</a>
         </li>
-         <li class={currentPath === "articles" ? "active" : ""}>
-          <a href="/articles">Articles</a>
+        <li class={section === "writing" ? "active" : ""}>
+          <a href="/writing">Writing</a>
         </li>
-        <li class={currentPath === "projects" ? "active" : ""}>
-          <a href="/projects">Projects</a>
+        <li class={section === "about" ? "active" : ""}>
+          <a href="/about">About</a>
         </li>
       </ul>
     </nav>
@@ -186,7 +185,7 @@ const currentPath = pathname.slice(1); // remove the first "/"
     nav ul {
       gap: 1rem;
     }
-    
+
     .header-controls {
     display: flex;
     flex-direction: row;
@@ -205,11 +204,11 @@ const currentPath = pathname.slice(1); // remove the first "/"
 
 <script>
   const themeToggle = document.getElementById('theme-toggle');
-  
+
   if (themeToggle) {
     themeToggle.addEventListener('click', () => {
       const isDark = document.documentElement.classList.contains('dark');
-      
+
       if (isDark) {
         document.documentElement.classList.remove('dark');
         localStorage.setItem('theme', 'light');
