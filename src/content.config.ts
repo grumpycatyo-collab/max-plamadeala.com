@@ -12,7 +12,19 @@ const articlesCollection = defineCollection({
     }),
     description: z.string().optional(),
     // Indicates whether the article is featured or highlighted.
-    featured: z.boolean().optional().default(false), 
+    featured: z.boolean().optional().default(false),
+  }),
+});
+
+// Archived pre-revision copies of articles, keyed by the same slug.
+// If an entry exists here, the article has a superseded original version.
+const articlesOriginalCollection = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./content/articles-original" }),
+  schema: z.object({
+    title: z.string(),
+    slug: z.string(),
+    publishDate: z.date().optional(),
+    description: z.string().optional(),
   }),
 });
 
@@ -39,6 +51,7 @@ const pagesCollection = defineCollection({
 
 export const collections = {
   'articles': articlesCollection,
+  'articlesOriginal': articlesOriginalCollection,
   'projects': projectsCollection,
   'pages': pagesCollection,
-}; 
+};

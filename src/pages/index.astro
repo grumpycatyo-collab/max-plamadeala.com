@@ -2,11 +2,15 @@
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import { readingTime } from '../lib/readingTime';
+import RevisedBadge from '../components/RevisedBadge.astro';
 
 const allArticles = await getCollection('articles');
 const recommendedArticles = allArticles
   .filter(article => article.data.featured)
   .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime());
+
+const originalEntries = await getCollection('articlesOriginal');
+const originalSlugs = new Set(originalEntries.map(o => o.data.slug));
 
 let lastYear: number | null = null;
 const recommendedRows = recommendedArticles.map(article => {
@@ -40,7 +44,10 @@ const recommendedRows = recommendedArticles.map(article => {
 					{recommendedRows.map(({ article, year, showYear }) => (
 						<li>
 							<span class="rec-year">{showYear ? year : ''}</span>
-							<a href={`/writing/${article.data.slug}`} class="rec-title">{article.data.title}</a>
+							<span class="title-with-badge">
+								<a href={`/writing/${article.data.slug}`} class="rec-title">{article.data.title}</a>
+								<RevisedBadge slug={article.data.slug} hasOriginal={originalSlugs.has(article.data.slug)} />
+							</span>
 							<span class="rec-time">{readingTime(article.body ?? '')}</span>
 						</li>
 					))}
@@ -132,6 +139,13 @@ const recommendedRows = recommendedArticles.map(article => {
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.85rem;
     color: var(--muted-color);
+  }
+
+  .title-with-badge {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    min-width: 0;
   }
 
   .rec-title {

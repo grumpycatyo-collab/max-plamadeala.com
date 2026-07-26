@@ -3,7 +3,6 @@ title: "Transforming a struggle into a personal challenge"
 publishDate: 2025-05-02
 description: "How I pushed myself to code a personal web-site due to an university lab."
 slug: "struggle-vs-challenge"
-featured: true
 ---
 
 ## Intro
@@ -13,7 +12,7 @@ The website is more like a `How to get hyped up overnight?`. Imagine me, at 9 am
 
 ## About the site (quite technical)
 
-After the grand momento, I immediately bought the `max-plamadeala.com` for additional motivation (`Man, I spent money on it, I should I use it then`). I also stole from @eduard-balamatiuc the idea of using [`Astro`](https://astro.build/) (Sorry, man). The idea behind `Astro` is that it is content-driven, meaning that it gives you everything in order for you to make documentation, blogs or content based web-sites.
+After the grand momento, I immediately bought the `max-plamadeala.com` for additional motivation (`Man, I spent money on it, I should I use it then`). I also stole from @eduard-balamatiuc the idea of using [`Astro`](https://astro.build/) (Sorry, man). The idea behind `Astro` is that it is content-driven, meaning that it gives you everything in order for you to make documentation, blogs or content based web-sites. 
 
 **Here is an example of how I use it to write articles:**
 

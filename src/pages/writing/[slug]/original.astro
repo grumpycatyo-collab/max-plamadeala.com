@@ -1,16 +1,10 @@
 ---
-import { getCollection, getEntry, render } from 'astro:content';
-import Layout from '../../layouts/Layout.astro';
-import Giscus from '../../components/Giscus.astro';
-import RevisedBadge from '../../components/RevisedBadge.astro';
+import { getCollection, render } from 'astro:content';
+import Layout from '../../../layouts/Layout.astro';
+
 export async function getStaticPaths() {
-  const articleEntries = await getCollection('articles');
-  
-  if (articleEntries.length === 0) {
-    return [];
-  }
-  
-  return articleEntries.map(entry => ({
+  const originalEntries = await getCollection('articlesOriginal');
+  return originalEntries.map(entry => ({
     params: { slug: entry.data.slug },
     props: { entry },
   }));
@@ -21,22 +15,21 @@ if (!entry) {
   return Astro.redirect("/404");
 }
 const { Content } = await render(entry);
-
-const ogImage = `/api/og/${encodeURIComponent(entry.data.slug)}`;
-
-const originalEntries = await getCollection('articlesOriginal');
-const hasOriginal = originalEntries.some(o => o.data.slug === entry.data.slug);
 ---
 
-<Layout title={entry.data.title} description={entry.data.description} ogImage={ogImage}>
+<Layout title={`${entry.data.title} (original version)`} description={entry.data.description}>
   <main class="container" id="main-content">
     <article class="article-content">
-      <h1><RevisedBadge slug={entry.data.slug} hasOriginal={hasOriginal} /> {entry.data.title}</h1>
-      <time datetime={entry.data.publishDate.toISOString()}>
-        {entry.data.publishDate.toISOString().split('T')[0]}
-      </time>
+      <p class="original-notice">
+        This is the original version of this article — <a href={`/writing/${entry.data.slug}`}>read the latest version →</a>
+      </p>
+      <h1>{entry.data.title}</h1>
+      {entry.data.publishDate && (
+        <time datetime={entry.data.publishDate.toISOString()}>
+          {entry.data.publishDate.toISOString().split('T')[0]}
+        </time>
+      )}
       <Content />
-      <Giscus />
     </article>
   </main>
 </Layout>
@@ -46,7 +39,25 @@ const hasOriginal = originalEntries.some(o => o.data.slug === entry.data.slug);
     padding: 2rem 0;
     max-width: 100%;
   }
-  
+
+  .original-notice {
+    margin: 0 0 1.5rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    background-color: var(--bg-secondary);
+    color: var(--muted-color);
+    font-size: 0.9rem;
+  }
+
+  .original-notice a {
+    color: var(--accent-color);
+    text-decoration: none;
+  }
+
+  .original-notice a:hover {
+    text-decoration: underline;
+  }
+
   h1 {
     font-size: 2.5rem;
     margin-bottom: 0.5rem;
