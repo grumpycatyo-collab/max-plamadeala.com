@@ -74,8 +74,7 @@ try {
     <meta property="twitter:creator" content="@grumpycatyo-collab" />
 
     <script is:inline>
-      const savedTheme = localStorage.getItem("theme") || 
-                         (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      const savedTheme = localStorage.getItem("theme") || "dark";
       document.documentElement.classList.toggle("dark", savedTheme === "dark");
     </script>
     <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "3d7918b1a5684e6b92acf3fabee353d0"}'></script><!-- End Cloudflare Web Analytics -->
@@ -86,16 +85,8 @@ try {
     <slot />
     <Footer />
     <script>
-      const theme = (() => {
-        if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
-          return localStorage.getItem("theme");
-        }
-        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-          return "dark";
-        }
-        return "light";
-      })();
-          
+      const theme = (typeof localStorage !== "undefined" && localStorage.getItem("theme")) || "dark";
+
       if (theme === "light") {
         document.documentElement.classList.remove("dark");
       } else {
@@ -105,16 +96,8 @@ try {
       window.localStorage.setItem("theme", theme as string);
     // Giscus theme sync
     const syncGiscusTheme = () => {
-      const theme = (() => {
-        if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
-          return localStorage.getItem("theme");
-        }
-        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-          return "dark";
-        }
-        return "light";
-      })();
-      
+      const theme = (typeof localStorage !== "undefined" && localStorage.getItem("theme")) || "dark";
+
       const iframe = document.querySelector('.giscus-frame') as HTMLIFrameElement;
       if (iframe) {
         const giscusTheme = theme === "dark" ? "dark" : "light";
@@ -262,6 +245,11 @@ try {
   :focus-visible {
     outline: 2px solid var(--accent-color);
     outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: var(--text-color);
+    color: var(--bg-color);
   }
   :root {
   --giscus-border-color: var(--border-color);

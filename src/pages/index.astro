@@ -35,7 +35,7 @@ const recommendedRows = recommendedArticles.map(article => {
 
 		{recommendedRows.length > 0 && (
 			<section class="recommended">
-				<span class="eyebrow">Writing I'd recommend</span>
+				<h2 class="recommended-heading">Writing I'd recommend</h2>
 				<ul class="recommended-list">
 					{recommendedRows.map(({ article, year, showYear }) => (
 						<li>
@@ -107,9 +107,11 @@ const recommendedRows = recommendedArticles.map(article => {
     margin-top: 2.5rem;
   }
 
-  .recommended .eyebrow {
-    font-family: 'Inter', sans-serif;
-    text-transform: none;
+  .recommended-heading {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--text-color);
+    margin: 0 0 1rem;
   }
 
   .recommended-list {
