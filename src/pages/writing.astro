@@ -1,6 +1,5 @@
 ---
 import { getCollection } from 'astro:content';
-import Header from '../components/Header.astro';
 import Layout from '../layouts/Layout.astro';
 import StarButton from '../components/StarButton.astro';
 
@@ -11,8 +10,7 @@ const sortedArticles = allArticles.sort(
 ---
 
 <Layout title="Writing">
-  <Header />
-  <main class="container">
+  <main class="container" id="main-content">
     <div class="articles-section">
       <h1>Writing</h1>
       {sortedArticles.length > 0 ? (

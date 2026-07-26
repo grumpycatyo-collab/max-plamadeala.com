@@ -1,6 +1,5 @@
 ---
 import { getCollection, getEntry, render } from 'astro:content';
-import Header from '../../components/Header.astro';
 import Layout from '../../layouts/Layout.astro';
 import StarButton from '../../components/StarButton.astro';
 import Giscus from '../../components/Giscus.astro';
@@ -28,8 +27,7 @@ const ogImage = `/api/og/${encodeURIComponent(entry.data.slug)}`;
 ---
 
 <Layout title={entry.data.title} description={entry.data.description} ogImage={ogImage}>
-  <Header />
-  <main class="container">
+  <main class="container" id="main-content">
     <article class="article-content">
       <div class="article-header">
         <h1>{entry.data.title}</h1>

@@ -1,5 +1,4 @@
 ---
-import Header from '../components/Header.astro';
 import Layout from '../layouts/Layout.astro';
 import { getEntry, render } from 'astro:content';
 
@@ -11,8 +10,7 @@ const { Content } = await render(entry);
 ---
 
 <Layout title={entry.data.title}>
-	<Header />
-	<main class="container">
+	<main class="container" id="main-content">
 		<article class="about-content">
 			<h1>{entry.data.title}</h1>
 			<Content />

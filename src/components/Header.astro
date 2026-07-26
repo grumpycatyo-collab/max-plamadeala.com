@@ -6,7 +6,7 @@ const section = currentPath.split('/')[0];
 <header>
   <div class="container header-container">
     <div class="logo">
-      <a href="/">@grumpycatyo-collab</a>
+      <a href="/">Max P.<span class="handle">@grumpycatyo-collab</span></a>
     </div>
     <nav>
       <ul>
@@ -67,11 +67,20 @@ const section = currentPath.split('/')[0];
 
   .logo a {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     font-weight: 500;
     color: var(--text-color);
     text-decoration: none;
     letter-spacing: -0.025em;
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+
+  .logo .handle {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--muted-color);
   }
 
   nav ul {
@@ -180,6 +189,10 @@ const section = currentPath.split('/')[0];
     .header-container {
       flex-direction: column;
       gap: 1rem;
+    }
+
+    .logo .handle {
+      display: none;
     }
 
     nav ul {
