@@ -1,0 +1,168 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('caseStudies');
+  return entries.map(entry => ({
+    params: { slug: entry.data.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+if (!entry) {
+  return Astro.redirect("/404");
+}
+const { Content } = await render(entry);
+const ogImage = `/api/og/${encodeURIComponent(entry.data.slug)}`;
+---
+
+<Layout title={`${entry.data.title} — Max P.`} description={entry.data.oneLiner} ogImage={ogImage}>
+  <main class="container" id="main-content">
+    <article class="case-study-content">
+      <p class="back-link"><a href="/work">&larr; Work</a></p>
+      <h1>{entry.data.title}</h1>
+      <p class="one-liner">{entry.data.oneLiner}</p>
+      <div class="cs-meta">
+        <div>
+          <span class="eyebrow">Role</span>
+          <span>{entry.data.role}</span>
+        </div>
+        <div>
+          <span class="eyebrow">Stack</span>
+          <span>{entry.data.stack.join(' · ')}</span>
+        </div>
+        <div>
+          <span class="eyebrow">Result</span>
+          <span class="cs-result">{entry.data.result}</span>
+        </div>
+      </div>
+      <Content />
+    </article>
+  </main>
+</Layout>
+
+<style>
+  .case-study-content {
+    padding: 2rem 0;
+    max-width: 100%;
+  }
+
+  .back-link {
+    margin: 0 0 1.5rem;
+  }
+
+  .back-link a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--muted-color);
+    text-decoration: none;
+  }
+
+  .back-link a:hover {
+    color: var(--accent-color);
+  }
+
+  h1 {
+    font-size: 2.25rem;
+    margin: 0 0 0.5rem;
+    font-weight: 500;
+    color: var(--text-color);
+  }
+
+  .one-liner {
+    font-size: 1.1rem;
+    color: var(--muted-color);
+    max-width: 60ch;
+    line-height: 1.6;
+    margin: 0 0 1.5rem;
+  }
+
+  .cs-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding: 1.25rem 0;
+    margin-bottom: 2rem;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .cs-meta > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .cs-meta .eyebrow {
+    margin: 0;
+  }
+
+  .cs-result {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent-color);
+  }
+
+  :global(.case-study-content h2) {
+    font-size: 1.6rem;
+    margin: 2.25rem 0 1rem;
+    font-weight: 500;
+    color: var(--text-color);
+  }
+
+  :global(.case-study-content p) {
+    margin: 1rem 0;
+    line-height: 1.65;
+    color: var(--text-color);
+  }
+
+  :global(.case-study-content ul), :global(.case-study-content ol) {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+  }
+
+  :global(.case-study-content li) {
+    margin: 0.5rem 0;
+    line-height: 1.6;
+  }
+
+  :global(.case-study-content code) {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9em;
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    background-color: rgba(128, 128, 128, 0.1);
+  }
+
+  :global(.case-study-content pre) {
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: rgba(128, 128, 128, 0.1);
+    overflow-x: auto;
+  }
+
+  :global(.case-study-content pre code) {
+    padding: 0;
+    background-color: transparent;
+  }
+
+  @media (max-width: 600px) {
+    .case-study-content {
+      padding: 1rem 0;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+    }
+
+    .cs-meta {
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    :global(.case-study-content h2) {
+      font-size: 1.35rem;
+    }
+  }
+</style>

@@ -1,0 +1,301 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+
+const allCaseStudies = await getCollection('caseStudies');
+const sortedCaseStudies = allCaseStudies.sort((a, b) => a.data.order - b.data.order);
+
+const allProjects = await getCollection('projects');
+const sortedProjects = allProjects.sort(
+  (a, b) => a.data.title.localeCompare(b.data.title)
+);
+
+const projectsWithContent = await Promise.all(
+  sortedProjects.map(async (project) => {
+    const { Content } = await render(project);
+    return { ...project, Content };
+  })
+);
+---
+
+<Layout title="Work — Max P." description="Selected engineering case studies: enterprise integrations, data infrastructure, and reliability.">
+  <main class="container" id="main-content">
+    <div class="work-section">
+      <h1>Work</h1>
+
+      <section class="selected-work" aria-labelledby="selected-work-label">
+        <span class="eyebrow" id="selected-work-label">Selected work</span>
+        <ul class="case-study-list">
+          {sortedCaseStudies.map(cs => (
+            <li>
+              <a href={`/work/${cs.data.slug}`} class="case-study-row">
+                <div class="cs-heading">
+                  <h2>{cs.data.title}</h2>
+                  <span class="cs-result">{cs.data.result}</span>
+                </div>
+                <p class="cs-one-liner">{cs.data.oneLiner}</p>
+                <div class="cs-meta">
+                  <span class="cs-role">{cs.data.role}</span>
+                  <span class="cs-stack">{cs.data.stack.join(' · ')}</span>
+                </div>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="also-built" aria-labelledby="also-built-label">
+        <span class="eyebrow" id="also-built-label">Also built</span>
+        {projectsWithContent.length > 0 ? (
+          <ul class="projects-list">
+            {projectsWithContent.map(project => (
+              <li>
+                <div class="project-row">
+                  {project.data.imagePath && (
+                    <div class="project-image">
+                      <img src={project.data.imagePath} alt={project.data.title} loading="lazy" />
+                    </div>
+                  )}
+                  <div class="project-info">
+                    <div class="project-header">
+                      <h3 class="project-title">
+                        <a href={project.data.link} target="_blank" rel="noopener noreferrer">
+                          {project.data.title}
+                        </a>
+                      </h3>
+                    </div>
+                    <div class="project-content">
+                      <project.Content />
+                    </div>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class="no-projects">No projects published yet. Check back soon!</p>
+        )}
+      </section>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .work-section {
+    padding: 2rem 0;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    font-weight: 500;
+    color: var(--text-color);
+  }
+
+  section + section {
+    margin-top: 3rem;
+  }
+
+  .case-study-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .case-study-list li {
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .case-study-list li:first-child {
+    border-top: 1px solid var(--border-color);
+  }
+
+  .case-study-row {
+    display: block;
+    padding: 1.25rem 0;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .cs-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+  }
+
+  .cs-heading h2 {
+    font-size: 1.35rem;
+    font-weight: 500;
+    margin: 0;
+    color: var(--text-color);
+    transition: color 0.2s ease;
+  }
+
+  .case-study-row:hover .cs-heading h2 {
+    color: var(--accent-color);
+  }
+
+  .cs-result {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--accent-color);
+    white-space: nowrap;
+  }
+
+  .cs-one-liner {
+    margin: 0.5rem 0 0.6rem;
+    color: var(--muted-color);
+    line-height: 1.55;
+    max-width: 65ch;
+  }
+
+  .cs-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted-color);
+  }
+
+  .cs-role {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .projects-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .projects-list li {
+    padding: 1.1rem 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .projects-list li:first-child {
+    border-top: 1px solid var(--border-color);
+  }
+
+  .project-row {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+
+  .project-image {
+    flex-shrink: 0;
+    width: 120px;
+    height: 120px;
+  }
+
+  .project-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+
+  .project-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .project-header {
+    margin-bottom: 0.5rem;
+  }
+
+  .project-title {
+    font-size: 1.15rem;
+    margin: 0;
+  }
+
+  .project-title a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .project-title a:hover {
+    color: var(--accent-color);
+  }
+
+  .project-content {
+    color: var(--muted-color);
+  }
+
+  :global(.project-content p) {
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  :global(.project-content strong) {
+    color: var(--text-color);
+  }
+
+  :global(.project-content a) {
+    color: var(--accent-color);
+    text-decoration: none;
+  }
+
+  :global(.project-content a:hover) {
+    text-decoration: underline;
+  }
+
+  :global(.project-content code) {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9em;
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    background-color: rgba(128, 128, 128, 0.1);
+  }
+
+  :global(.project-content pre) {
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: rgba(128, 128, 128, 0.1);
+    overflow-x: auto;
+  }
+
+  :global(.project-content pre code) {
+    padding: 0;
+    background-color: transparent;
+  }
+
+  .no-projects {
+    color: var(--muted-color);
+    font-size: 1.1rem;
+  }
+
+  @media (max-width: 600px) {
+    .work-section {
+      padding: 1rem 0;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .cs-heading {
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .project-row {
+      gap: 1rem;
+    }
+
+    .project-image {
+      width: 80px;
+      height: 80px;
+    }
+
+    .project-title {
+      font-size: 1.1rem;
+    }
+  }
+</style>

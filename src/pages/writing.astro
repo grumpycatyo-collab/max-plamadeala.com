@@ -1,8 +1,8 @@
 ---
 import { getCollection } from 'astro:content';
-import Header from '../components/Header.astro';
 import Layout from '../layouts/Layout.astro';
 import StarButton from '../components/StarButton.astro';
+import { readingTime } from '../lib/readingTime';
 
 const allArticles = await getCollection('articles');
 const sortedArticles = allArticles.sort(
@@ -10,11 +10,12 @@ const sortedArticles = allArticles.sort(
 );
 ---
 
-<Layout title="All Articles">
-	<Header />
-  <main class="container">
-    <div class="articles-section">
-      <h1>All Articles</h1>
+<Layout title="Writing — Max P." description="Notes on Go, distributed systems, reliability, and applied AI.">
+  <main class="container" id="main-content">
+    <div class="writing-section">
+      <h1>Writing</h1>
+      <p class="intro">A technical notebook — Go, distributed systems, reliability, and whatever
+      broke in production most recently.</p>
       {sortedArticles.length > 0 ? (
         <ul class="articles-list">
           {sortedArticles.map(article => (
@@ -23,18 +24,21 @@ const sortedArticles = allArticles.sort(
                 {article.data.publishDate.toISOString().split('T')[0]}
               </time>
               <div class="article-info">
-                <a href={`/articles/${article.data.slug}`}>
+                <a href={`/writing/${article.data.slug}`}>
                   {article.data.title}
                   {article.data.description && (
                     <span class="description">{article.data.description}</span>
                   )}
+                  <span class="meta-row">
+                    {article.data.topic && <span class="topic">{article.data.topic}</span>}
+                    <span class="reading-time">{readingTime(article.body ?? '')}</span>
+                  </span>
                 </a>
-                <StarButton 
-                  articleSlug={article.data.slug} 
+                <StarButton
+                  articleSlug={article.data.slug}
                   featured={article.data.featured}
                 />
               </div>
-
             </li>
           ))}
         </ul>
@@ -46,15 +50,22 @@ const sortedArticles = allArticles.sort(
 </Layout>
 
 <style>
-  .articles-section {
+  .writing-section {
     padding: 2rem 0;
   }
 
   h1 {
     font-size: 2.5rem;
-    margin-bottom: 2rem;
+    margin-bottom: 0.5rem;
     font-weight: 500;
     color: var(--text-color);
+  }
+
+  .intro {
+    color: var(--muted-color);
+    margin: 0 0 2rem;
+    max-width: 55ch;
+    line-height: 1.6;
   }
 
   .articles-list {
@@ -102,6 +113,21 @@ const sortedArticles = allArticles.sort(
     font-weight: normal;
   }
 
+  .meta-row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    font-weight: normal;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted-color);
+  }
+
+  .topic {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
   .no-articles {
     color: var(--muted-color);
     font-size: 1.1rem;
@@ -115,7 +141,7 @@ const sortedArticles = allArticles.sort(
   }
 
   @media (max-width: 600px) {
-    .articles-section {
+    .writing-section {
       padding: 1rem 0;
     }
 
@@ -134,4 +160,4 @@ const sortedArticles = allArticles.sort(
       margin-right: 0;
     }
   }
-</style>   
+</style>

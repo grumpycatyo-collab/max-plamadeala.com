@@ -12,7 +12,9 @@ const articlesCollection = defineCollection({
     }),
     description: z.string().optional(),
     // Indicates whether the article is featured or highlighted.
-    featured: z.boolean().optional().default(false), 
+    featured: z.boolean().optional().default(false),
+    // Short topic label shown next to the date, e.g. "Go", "Reliability".
+    topic: z.string().optional(),
   }),
 });
 
@@ -26,6 +28,22 @@ const projectsCollection = defineCollection({
   }),
 });
 
+const caseStudiesCollection = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./content/case-studies" }),
+  schema: z.object({
+    title: z.string(),
+    slug: z.string(),
+    // One-sentence description shown in list rows.
+    oneLiner: z.string(),
+    role: z.string(),
+    stack: z.array(z.string()),
+    // Headline measurable result, shown in list rows (e.g. "MTTR -35%").
+    result: z.string(),
+    // Controls display order in the Selected Work list (lower first).
+    order: z.number().default(0),
+  }),
+});
+
 const pagesCollection = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./content/pages" }),
   schema: z.object({
@@ -36,5 +54,6 @@ const pagesCollection = defineCollection({
 export const collections = {
   'articles': articlesCollection,
   'projects': projectsCollection,
+  'caseStudies': caseStudiesCollection,
   'pages': pagesCollection,
 }; 

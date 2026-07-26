@@ -77,33 +77,42 @@ async function generateOGImage(title: string) {
   return canvas.toBuffer();
 }
 
-// Generate static paths for all articles plus a default
+// Generate static paths for all articles, case studies, plus a default
 export async function getStaticPaths() {
   const articles = await getCollection('articles');
-  
+  const caseStudies = await getCollection('caseStudies');
+
   return [
     { params: { slug: 'default' } },
     ...articles.map(article => ({
       params: { slug: article.data.slug }
-    }))
+    })),
+    ...caseStudies.map(caseStudy => ({
+      params: { slug: caseStudy.data.slug }
+    })),
   ];
 }
 
 // Handle the OG image request
 export const GET: APIRoute = async ({ params }) => {
   // Get the title based on slug
-  let title = '@grumpycatyo-collab';
-  
+  let title = 'Max P.';
+
   if (params.slug && params.slug !== 'default') {
-    // Find the article by slug
     const articles = await getCollection('articles');
     const article = articles.find(a => a.data.slug === params.slug);
-    
+
     if (article) {
       title = article.data.title;
+    } else {
+      const caseStudies = await getCollection('caseStudies');
+      const caseStudy = caseStudies.find(c => c.data.slug === params.slug);
+      if (caseStudy) {
+        title = caseStudy.data.title;
+      }
     }
   }
-  
+
   const imageBuffer = await generateOGImage(title);
   
   return new Response(imageBuffer, {

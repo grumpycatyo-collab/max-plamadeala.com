@@ -1,138 +1,280 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
 import Callout from '../components/Callout.astro';
 import StarButton from '../components/StarButton.astro';
+import { readingTime } from '../lib/readingTime';
 
 import { getCollection } from 'astro:content';
 
 const allArticles = await getCollection('articles');
-const allProjects = await getCollection('projects');
-
 const sortedArticles = allArticles.sort(
   (a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime()
 );
-const recentArticles = sortedArticles.slice(0, 3); 
+const recentArticles = sortedArticles.slice(0, 3);
 
-const sortedProjects = allProjects.sort(
-  (a, b) => a.data.title.localeCompare(b.data.title)
-);
-const recentProjects = sortedProjects.slice(0, 3);
+const allCaseStudies = await getCollection('caseStudies');
+const selectedWork = allCaseStudies.sort((a, b) => a.data.order - b.data.order).slice(0, 3);
+
+const experience = [
+  "Owned 35+ enterprise SaaS integrations used across 100+ enterprise tenants.",
+  "Worked and learned from 300+ production incidents — reduced mean time to recovery by 35%.",
+  "Rebuilt high-volume Snowflake extraction for 10,000+ row queries — cost down 60%, recurring failures down 60%.",
+  "Cut Kafka consumer lag by 78% by fixing partitioning and adding bounded, ordered concurrency.",
+];
 ---
 
-<Layout title="@grumpycatyo-collab">
-	<Header />
-	<main class="container">
-		<section class="hero" style="text-align: left;">
-			<h1><em>Hello!</em>👋</h1>
-      <p class="description" style="margin: 0;">
-        I'm Max. In here you can find my projects, articles, and some random stuff I like to do.
-       <br /> 
-       Get in touch: <a href="mailto:me@max-plamadeala.com" class="email-link"><code>me@max-plamadeala.com</code></a>
-      </p>
-			<Callout href="/cv_maxim_plamadeala.pdf" text="CV" icon="lightbulb" target="_blank" rel="noopener noreferrer" />
+<Layout title="Max P. — Software Engineer" description="Software engineer building reliable distributed systems, integrations, and data infrastructure. Go, Python, and a lot of production incidents.">
+	<main class="container" id="main-content">
+		<section class="hero">
+			<p class="greeting"><em>Hello!</em> 👋</p>
+			<h1>Software engineer building reliable distributed systems, integrations, and data infrastructure.</h1>
+			<p class="description">
+				I'm Max — I work mostly in <code>Go</code> and <code>Python</code>, on backend,
+				reliability, and infrastructure problems. Most of what I build professionally is
+				private, so this site holds selected case studies, writing, and whatever else I've
+				been building.
+			</p>
+			<p class="hero-actions">
+				<a href="/work">View selected work →</a>
+				<a href="/writing">Read writing →</a>
+				<a href="https://github.com/grumpycatyo-collab" target="_blank" rel="noopener noreferrer">GitHub</a>
+				<a href="https://www.linkedin.com/in/max-plamadeala/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+			</p>
 		</section>
-		
-		<section class="recent-posts">
-			<h2>Recent Articles</h2>
+
+		<section class="selected-work">
+			<span class="eyebrow">Selected work</span>
+			<ul class="case-study-list">
+				{selectedWork.map(cs => (
+					<li>
+						<a href={`/work/${cs.data.slug}`} class="case-study-row">
+							<div class="cs-heading">
+								<span class="cs-title">{cs.data.title}</span>
+								<span class="cs-result">{cs.data.result}</span>
+							</div>
+							<p class="cs-one-liner">{cs.data.oneLiner}</p>
+						</a>
+					</li>
+				))}
+			</ul>
+			<a href="/work" class="view-all">View all work →</a>
+		</section>
+
+		<section class="writing">
+			<span class="eyebrow">Writing</span>
 			{recentArticles.length > 0 ? (
 			  <ul class="post-list">
 				{recentArticles.map(article => (
 				  <li>
 					<span class="post-date">{article.data.publishDate.toISOString().split('T')[0]}</span>
 					<div class="article-info">
-                <a href={`/articles/${article.data.slug}`}>{article.data.title}</a>
-                <StarButton 
-                  articleSlug={article.data.slug} 
-                  featured={article.data.featured}
-                />
-              </div>
-              </li>
+              <a href={`/writing/${article.data.slug}`}>
+                {article.data.title}
+                <span class="meta-row">
+                  {article.data.topic && <span class="topic">{article.data.topic}</span>}
+                  <span>{readingTime(article.body ?? '')}</span>
+                </span>
+              </a>
+              <StarButton
+                articleSlug={article.data.slug}
+                featured={article.data.featured}
+              />
+            </div>
+				  </li>
 				))}
 			  </ul>
-			  <a href="/articles" class="view-all">View all articles →</a>
+			  <a href="/writing" class="view-all">View all writing →</a>
 			) : (
 			  <p>None yet, but stay tuned!</p>
 			)}
 		  </section>
+
+		<section class="experience">
+			<span class="eyebrow">Experience</span>
+			<p class="experience-intro">
+				Most of my recent work has been on backend systems and data infrastructure for an
+				enterprise SaaS product — the specifics are private, but the scope isn't:
+			</p>
+			<ul class="experience-list">
+				{experience.map(item => <li>{item}</li>)}
+			</ul>
+			<Callout href="/cv_maxim_plamadeala.pdf" text="Full CV" icon="lightbulb" target="_blank" rel="noopener noreferrer" />
+		</section>
+
+		<section class="about-teaser">
+			<span class="eyebrow">About</span>
+			<p>
+				I'm based in Chișinău, Moldova. When I'm not neck-deep in a queue or a pipeline, I'm
+				usually reading about Linux internals, poking at something on my own infra, or
+				writing up whatever incident taught me the most that week.
+			</p>
+			<a href="/about" class="view-all">More about me →</a>
+		</section>
 	</main>
 </Layout>
 
 <style>
   .hero {
-    padding: 4rem 0;
-    text-align: center;
+    padding: 3rem 0 2.5rem;
+  }
+
+  .greeting {
+    font-size: 1.5rem;
+    margin: 0 0 0.75rem;
   }
 
   h1 {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .subtitle {
-    font-size: 1.25rem;
-    color: var(--accent-color);
-    margin-bottom: 1.5rem;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    line-height: 1.25;
+    font-weight: 500;
+    margin: 0 0 1rem;
+    max-width: 22ch;
   }
 
   .description {
-    max-width: 600px;
-    margin: 0 auto;
-    font-size: 1.1rem;
+    max-width: 60ch;
+    font-size: 1.05rem;
     line-height: 1.6;
     color: var(--muted-color);
+    margin: 0 0 1.5rem;
   }
 
-  .recent-posts, .recent-projects {
-    margin-top: 2rem;
+  .description code {
+    font-size: 0.9em;
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
+    background-color: var(--bg-secondary);
+    color: var(--text-color);
   }
 
-  .post-list, .project-list {
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    margin: 0;
+  }
+
+  .hero-actions a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .hero-actions a:hover {
+    color: var(--accent-color);
+  }
+
+  section.selected-work, section.writing, section.experience, section.about-teaser {
+    margin-top: 3rem;
+  }
+
+  .case-study-list {
     list-style: none;
     padding: 0;
-    margin: 2rem 0;
+    margin: 0;
   }
 
-  .post-list li, .project-list li {
+  .case-study-list li {
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .case-study-list li:first-child {
+    border-top: 1px solid var(--border-color);
+  }
+
+  .case-study-row {
+    display: block;
+    padding: 1rem 0;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .cs-heading {
     display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+  }
+
+  .cs-title {
+    font-weight: 500;
+    color: var(--text-color);
+    transition: color 0.2s ease;
+  }
+
+  .case-study-row:hover .cs-title {
+    color: var(--accent-color);
+  }
+
+  .cs-result {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--accent-color);
+    white-space: nowrap;
+  }
+
+  .cs-one-liner {
+    margin: 0.35rem 0 0;
+    color: var(--muted-color);
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .post-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .post-list li {
+    display: flex;
+    align-items: baseline;
     padding: 1rem 0;
     border-bottom: 1px solid var(--border-color);
   }
 
-  .post-list li {
-    align-items: baseline;
-  }
-
-  .project-list li a {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
+  .post-list li:first-child {
+    border-top: 1px solid var(--border-color);
   }
 
   .post-date {
-    font-family: 'Fira Code', monospace;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 0.85rem;
     color: var(--muted-color);
     min-width: 110px;
     margin-right: 1.5rem;
   }
 
-  .post-list a, .project-list a {
+  .post-list a {
     color: var(--text-color);
     text-decoration: none;
     font-weight: 500;
     transition: color 0.2s;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
   }
 
-  .post-list a:hover, .project-list a:hover {
+  .post-list a:hover {
     color: var(--accent-color);
   }
 
-  .project-description {
-    font-size: 0.9rem;
-    color: var(--muted-color);
+  .meta-row {
+    display: flex;
+    gap: 0.75rem;
     font-weight: normal;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted-color);
   }
+
+  .topic {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
   .article-info {
     display: flex;
     justify-content: space-between;
@@ -149,32 +291,51 @@ const recentProjects = sortedProjects.slice(0, 3);
     font-weight: 500;
   }
 
-  .email-link {
-    text-decoration: none;
-    color: inherit;
+  .experience-intro {
+    color: var(--muted-color);
+    line-height: 1.6;
+    max-width: 65ch;
+    margin: 0 0 1rem;
   }
 
-  .email-link code {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.9em;
-    padding: 0.2em 0.4em;
-    border-radius: 4px;
-    background-color: rgba(128, 128, 128, 0.1);
-    transition: background-color 0.2s;
+  .experience-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .experience-list li {
+    position: relative;
+    padding-left: 1.25rem;
+    line-height: 1.55;
     color: var(--text-color);
+    max-width: 65ch;
   }
 
-  .email-link:hover code {
-    background-color: rgba(128, 128, 128, 0.2);
+  .experience-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--accent-color);
+  }
+
+  .about-teaser p {
+    color: var(--muted-color);
+    line-height: 1.6;
+    max-width: 65ch;
+    margin: 0;
   }
 
   @media (max-width: 600px) {
     .hero {
-      padding: 2rem 0;
-    }
-
-    h1 {
-      font-size: 2rem;
+      padding: 2rem 0 1.5rem;
     }
 
     .post-list li {
@@ -185,6 +346,11 @@ const recentProjects = sortedProjects.slice(0, 3);
     .post-date {
       min-width: unset;
       margin-right: 0;
+    }
+
+    .cs-heading {
+      flex-direction: column;
+      gap: 0.2rem;
     }
   }
 </style>

@@ -1,5 +1,4 @@
 ---
-import Header from '../components/Header.astro';
 import Layout from '../layouts/Layout.astro';
 import { getEntry, render } from 'astro:content';
 
@@ -10,9 +9,8 @@ if (!entry) {
 const { Content } = await render(entry);
 ---
 
-<Layout title={entry.data.title}>
-	<Header />
-	<main class="container">
+<Layout title="About — Max P." description="Backend engineer working across distributed systems, integrations, and data infrastructure. Based in Chișinău, Moldova.">
+	<main class="container" id="main-content">
 		<article class="about-content">
 			<h1>{entry.data.title}</h1>
 			<Content />
@@ -39,16 +37,6 @@ const { Content } = await render(entry);
 		color: var(--text-color);
 	}
 
-	:global(.about-content a) {
-		color: var(--accent-color);
-		text-decoration: none;
-	}
-
-
-  :global(.about-content a:hover) {
-    text-decoration: underline;
-  }
-
   :global(.about-content code) {
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.9em;
@@ -69,4 +57,10 @@ const { Content } = await render(entry);
     background-color: transparent;
   }
 
+  @media (max-width: 600px) {
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+  }
 </style>

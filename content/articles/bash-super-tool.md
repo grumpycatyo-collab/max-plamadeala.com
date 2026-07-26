@@ -4,6 +4,7 @@ publishDate: 2025-05-02
 description: "Things I learnt about bash."
 slug: "bash-super-tool"
 featured: false
+topic: "Tooling"
 ---
 
 Bash or mainly `Bourne-Again SHell` is an interactive command interpreter and command programming language as Wiki says. As an Engineer you typically use it every day, to run commands and do `magic`.

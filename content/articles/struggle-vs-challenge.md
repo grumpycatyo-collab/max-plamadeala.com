@@ -4,6 +4,7 @@ publishDate: 2025-05-02
 description: "How I pushed myself to code a personal web-site due to an university lab."
 slug: "struggle-vs-challenge"
 featured: true
+topic: "Craft"
 ---
 
 ## Intro
