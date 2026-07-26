@@ -23,6 +23,8 @@ const projectsCollection = defineCollection({
     link: z.string(),
     slug: z.string(),
     imagePath: z.string().optional(),
+    // Marks a project to stand out in the work list.
+    featured: z.boolean().optional().default(false),
   }),
 });
 

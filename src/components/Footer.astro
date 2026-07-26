@@ -1,37 +1,19 @@
----
-const year = new Date().getFullYear();
----
 <footer>
   <div class="container footer-container">
-    <div class="footer-row">
-      <a href="/" class="footer-name">Max P.</a>
-      <nav class="footer-links" aria-label="Social links">
-        <a href="https://github.com/grumpycatyo-collab" target="_blank" rel="noopener noreferrer">GitHub</a>
-        <a href="https://www.linkedin.com/in/max-plamadeala/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        <a href="mailto:me@max-plamadeala.com">Email</a>
-      </nav>
-    </div>
-    <div class="footer-row footer-meta">
-      <span>Chișinău, Moldova · © {year}</span>
-      <span class="footer-quip"><em>@grumpycatyo-collab, still</em></span>
-    </div>
+    <p class="footer-name">
+      Max Plamadeala (<a href="https://github.com/grumpycatyo-collab" target="_blank" rel="noopener noreferrer">@grumpycatyo-collab</a>)
+    </p>
+    <a href="https://github.com/grumpycatyo-collab/max-plamadeala.com" target="_blank" rel="noopener noreferrer" class="footer-source">Source</a>
   </div>
 </footer>
 
 <style>
   footer {
-    border-top: 1px solid var(--border-color);
-    padding: 2rem 0;
+    padding: 1.5rem 0;
     margin-top: 4rem;
   }
 
   .footer-container {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .footer-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -41,43 +23,32 @@ const year = new Date().getFullYear();
 
   .footer-name {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.95rem;
-    color: var(--text-color);
-    text-decoration: none;
-    font-weight: 500;
-  }
-
-  .footer-links {
-    display: flex;
-    gap: 1.25rem;
-  }
-
-  .footer-links a {
-    color: var(--muted-color);
-    text-decoration: none;
     font-size: 0.85rem;
+    color: var(--muted-color);
+    margin: 0;
+  }
+
+  .footer-name a {
+    color: var(--muted-color);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
     transition: color 0.2s ease;
   }
 
-  .footer-links a:hover {
+  .footer-name a:hover {
     color: var(--accent-color);
   }
 
-  .footer-meta {
-    font-size: 0.8rem;
-    color: var(--muted-color);
-  }
-
-  .footer-quip {
+  .footer-source {
+    font-family: 'JetBrains Mono', monospace;
     font-size: 0.85rem;
     color: var(--muted-color);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+    transition: color 0.2s ease;
   }
 
-  @media (max-width: 600px) {
-    .footer-row {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.5rem;
-    }
+  .footer-source:hover {
+    color: var(--accent-color);
   }
 </style>
