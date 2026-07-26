@@ -32,6 +32,8 @@ const pagesCollection = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./content/pages" }),
   schema: z.object({
     title: z.string(),
+    // Spotify track/album/playlist URL, e.g. https://open.spotify.com/track/...
+    spotifyTrack: z.string().optional(),
   }),
 });
 
