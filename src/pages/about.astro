@@ -7,6 +7,13 @@ if (!entry) {
 	return Astro.redirect('/404');
 }
 const { Content } = await render(entry);
+
+const outsideEntry = await getEntry('pages', 'about-outside');
+const OutsideContent = outsideEntry ? (await render(outsideEntry)).Content : null;
+
+const spotifyUrl = entry.data.spotifyTrack && /^https:\/\/open\.spotify\.com\//.test(entry.data.spotifyTrack)
+	? entry.data.spotifyTrack
+	: null;
 ---
 
 <Layout title={entry.data.title}>
@@ -15,13 +22,165 @@ const { Content } = await render(entry);
 			<h1>{entry.data.title}</h1>
 			<Content />
 		</article>
+
+		{OutsideContent && (
+			<div class="outside-row">
+				<article class="about-content outside-text">
+					<OutsideContent />
+				</article>
+
+				{spotifyUrl && (
+					<aside class="song-of-the-day" data-spotify-widget data-spotify-url={spotifyUrl}>
+						<span class="eyebrow">Recommended listening</span>
+						<a
+							class="song-box is-loading"
+							href={spotifyUrl}
+							target="_blank"
+							rel="noopener noreferrer"
+							aria-label="Listen on Spotify"
+						>
+							<span class="song-skeleton"></span>
+							<img class="song-img" alt="" loading="lazy" style="display:none" />
+							<span class="song-scrim"></span>
+							<span class="song-play" aria-hidden="true">
+								<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+									<path d="M8 5v14l11-7z" />
+								</svg>
+							</span>
+							<span class="song-title"></span>
+						</a>
+					</aside>
+				)}
+			</div>
+		)}
 	</main>
 </Layout>
+
+<script>
+	const widget = document.querySelector<HTMLElement>('[data-spotify-widget]');
+	const url = widget?.dataset.spotifyUrl;
+
+	if (widget && url) {
+		fetch(`https://open.spotify.com/oembed?url=${encodeURIComponent(url)}`)
+			.then(res => (res.ok ? res.json() : null))
+			.then(data => {
+				if (!data) return;
+				const box = widget.querySelector('.song-box');
+				const img = widget.querySelector<HTMLImageElement>('.song-img');
+				const title = widget.querySelector('.song-title');
+
+				if (img && data.thumbnail_url) {
+					img.src = data.thumbnail_url;
+					img.style.display = '';
+				}
+				if (title && data.title) {
+					title.textContent = data.title;
+				}
+				if (box && data.title) {
+					box.setAttribute('aria-label', `Listen to ${data.title} on Spotify`);
+				}
+				box?.classList.remove('is-loading');
+			})
+			.catch(() => {
+				// Spotify didn't respond in time — the button still links out fine as-is.
+			});
+	}
+</script>
 
 <style>
 	.about-content {
 		padding: 2rem 0;
 		max-width: 100%;
+	}
+
+	.outside-row {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 1rem 2.5rem;
+		align-items: start;
+	}
+
+	.outside-row .about-content {
+		padding: 0;
+	}
+
+	.song-of-the-day {
+		padding-top: 0.5rem;
+	}
+
+	.song-box {
+		position: relative;
+		display: block;
+		width: 100%;
+		max-width: 160px;
+		aspect-ratio: 1;
+		border-radius: 12px;
+		overflow: hidden;
+		border: 1px solid var(--border-color);
+	}
+
+	.song-box img {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.song-skeleton {
+		position: absolute;
+		inset: 0;
+		background-color: var(--bg-secondary);
+	}
+
+	.song-box.is-loading .song-skeleton {
+		animation: song-pulse 1.4s ease-in-out infinite;
+	}
+
+	.song-box:not(.is-loading) .song-skeleton {
+		display: none;
+	}
+
+	@keyframes song-pulse {
+		0%, 100% { opacity: 1; }
+		50% { opacity: 0.6; }
+	}
+
+	.song-scrim {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.1) 45%, transparent 65%);
+	}
+
+	.song-play {
+		position: absolute;
+		top: 0.75rem;
+		right: 0.75rem;
+		width: 2rem;
+		height: 2rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 50%;
+		background-color: rgba(0, 0, 0, 0.55);
+		color: #fff;
+		transition: background-color 0.2s ease, transform 0.2s ease;
+	}
+
+	.song-box:hover .song-play {
+		background-color: var(--accent-color);
+		transform: scale(1.08);
+	}
+
+	.song-title {
+		position: absolute;
+		left: 0.85rem;
+		right: 0.85rem;
+		bottom: 0.75rem;
+		color: #fff;
+		font-size: 0.9rem;
+		font-weight: 500;
+		line-height: 1.3;
 	}
 
 	h1 {
@@ -65,6 +224,17 @@ const { Content } = await render(entry);
   :global(.about-content pre code) {
     padding: 0;
     background-color: transparent;
+  }
+
+  @media (min-width: 900px) {
+    .outside-row {
+      grid-template-columns: 1fr 260px;
+      align-items: center;
+    }
+
+    .song-of-the-day {
+      padding-top: 0;
+    }
   }
 
 </style>

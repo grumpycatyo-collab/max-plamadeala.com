@@ -1,5 +1,6 @@
 ---
 title: "About Me"
+spotifyTrack: "https://open.spotify.com/track/03u2Y4Nc6cefOc6U58ITNa"
 ---
 
 ## Warm-up
@@ -16,9 +17,3 @@ My path into software engineering began with several years of hands-on work in G
 At Parkopedia, I specialized in geographic data — parking spaces, processing pipelines, and lots of imagery. It was also around then that I realized I really did need math in my life, so a beautiful reunion happened: me and differential equations, and of course, the integrals. As you can probably tell, that job was real fun.
 
 These days, I’m at Reco, and the work is quite different. It’s no longer only about fixing pipelines or implementing features, but also about helping other people solve problems effectively. My communication and customer-facing skills have grown more than I expected. I’ve also taken on mentoring and leadership responsibilities, becoming more involved in prioritization, incident handling, and the processes that keep the team moving.
-
-## Outside of work
-
-When I'm not at a keyboard, I'm probably at the gym, or traveling. Have you ever been to Georgia? I recommend it - lots of good food and great people.
-
-Thanks for reading this improvised text, and if you want to contact me, in the header you can find the link to my LinkedIn.
