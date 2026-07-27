@@ -14,7 +14,7 @@ So yes, I knew enough to build something. I had just never felt particularly exc
 
 That changed one morning during a web programming class.
 
-At around 9 a.m., while I was still trying to come up with a topic for one of our assignments, I noticed a friend working on his own personal website (https://eduard-balamatiuc.com/). He was technically completing the same assignment, but he was not building something only because the university required it. He was creating something useful for himself.
+At around 9 a.m., while I was still trying to come up with a topic for one of our assignments, I noticed a friend, [Eduard Balamatiuc](https://eduard-balamatiuc.com/), working on his own personal website. He was technically completing the same assignment, but he was not building something only because the university required it. He was creating something useful for himself.
 
 That was the moment the idea clicked.
 
