@@ -138,6 +138,31 @@ const { Content } = await render(entry);
     color: var(--muted-color);
   }
 
+  :global(.article-content table) {
+    width: 100%;
+    margin: 1.5rem 0;
+    border-collapse: collapse;
+    display: block;
+    overflow-x: auto;
+  }
+
+  :global(.article-content th),
+  :global(.article-content td) {
+    padding: 0.6em 1em;
+    border: 1px solid rgba(128, 128, 128, 0.3);
+    text-align: left;
+    color: var(--text-color);
+  }
+
+  :global(.article-content th) {
+    font-weight: 500;
+    background-color: rgba(128, 128, 128, 0.1);
+  }
+
+  :global(.article-content tr:nth-child(even) td) {
+    background-color: rgba(128, 128, 128, 0.05);
+  }
+
   @media (max-width: 600px) {
     .article-content {
       padding: 1rem 0;

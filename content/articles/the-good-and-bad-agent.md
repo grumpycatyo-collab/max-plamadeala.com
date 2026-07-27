@@ -6,26 +6,17 @@ slug: "the-good-and-bad"
 featured: true
 ---
 
-It’s probably not news to any of us that agents now do a lot of coding work, including reviewing PRs.
-
+It’s probably not news to any of us that agents now do a lot of coding work, including reviewing PRs. 
 For a long time, this has been a bit of a bummer for me. An agent reviewing your PR—Cursor BugBot, a custom Cursor reviewer, or something similar—can suddenly bloat the entire PR with comments.
-
 Sometimes, if you’re lucky, you get no more than ten comments. On its worst days, however, it might leave 150 comments of pure hatred toward you and your code.
-
 Good comments and thoughtful reviews are really important to me. I’m not a huge fan of agent reviews because, in my opinion, there is a limit to how good they can be.
 
-If an agent leaves 20 comments, fair enough—I’ll take a look.
-
-If it leaves 50, that sounds a little strange, but sure, I’ll skim through them.
-
-But if it leaves more than 70 or 80?
-
-No. Absolutely not.
+If an agent leaves 20 comments, fair enough—I’ll take a look. If it leaves 50, that sounds a little strange, but sure, I’ll skim through them.
+But if it leaves more than 70 or 80? No. Absolutely not.
 
 There is also the problem of agent drift. The more comments and context the reviewer has to process, the more likely it is to drift. The same thing can happen to the model you ask to resolve those comments.
 
 To combat this cycle of agony, I decided to fight on equal terms and create my own thing.
-
 On my local machine, it is called `acceptance-supervised-resolve`, but you can call it Ted. Or Rick.
 
 ## How it works
@@ -70,4 +61,7 @@ If the supervisor rejects the changes, they go back to the resolver for another 
 
 The loop continues until everything is good and crispy.
 
-After that, your PR should be clean and smooth like butter.
+After that, your PR should be clean and smooth like butter. Also here is the link to the skill:
+[github.com/grumpycatyo-collab/skills](https://github.com/grumpycatyo-collab/skills)
+
+Thanks!
