@@ -35,11 +35,7 @@ Why?
 
 Because we need to freeze the original version of the branch before the resolver starts making changes. Your current branch remains the working branch, while the acceptance branch becomes the untouched source of truth.
 
-```text
-ACCEPTANCE  ── frozen tip (SoT) ─────────────────────────────►  (untouched)
-                 │
-WORK (same tip) ─┴── fix1 ── fix2 ── … ──►  supervisor-approved tip
-```
+![Diagram showing the ACCEPTANCE branch frozen at its tip as the source of truth, while the WORK branch progresses through fix1, fix2, and further fixes to a supervisor-approved tip](/article-images/acceptance-work-flow.png)
 
 The supervisor then looks through the GitHub review comments and classifies each one:
 

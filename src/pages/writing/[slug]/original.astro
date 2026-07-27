@@ -163,6 +163,14 @@ const { Content } = await render(entry);
     background-color: rgba(128, 128, 128, 0.05);
   }
 
+  :global(.article-content img) {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 1.5rem auto;
+    border-radius: 8px;
+  }
+
   @media (max-width: 600px) {
     .article-content {
       padding: 1rem 0;
