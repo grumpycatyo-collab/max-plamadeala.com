@@ -7,20 +7,48 @@ featured: true
 ---
 
 ## Intro
-First of all, I want to say that I've had some minor experiences with writing front-end projects. It was mainly because practically at every hackathon I went to with my friends, I was forced to write front-end (no one knew `React` or other front frameworks). So yeah, I do have some knowledge.
 
-The website is more like a `How to get hyped up overnight?`. Imagine me, at 9 am thinking of the topic for Lab 6 at Web Programming and then I see @eduard-balamatiuc actually doing the lab, not because he is forced to, but because he is doing it for himself, since he's creating a personal website. In that exact moment, I got the thing, the big idea of doing a project for myself, and I took it as a personal challenge, something like: `I should make this website the image of myself, so it basically reflects how good I am at my craft. If I don't do it, I am an idiot.`
+I have some experience building front-end projects, although it was never really my main focus. At almost every hackathon I attended with friends, I somehow ended up being responsible for the front end because nobody else knew React or another front-end framework.
 
-## About the site (quite technical)
+So yes, I knew enough to build something. I had just never felt particularly excited about doing it.
 
-After the grand momento, I immediately bought the `max-plamadeala.com` for additional motivation (`Man, I spent money on it, I should I use it then`). I also stole from @eduard-balamatiuc the idea of using [`Astro`](https://astro.build/) (Sorry, man). The idea behind `Astro` is that it is content-driven, meaning that it gives you everything in order for you to make documentation, blogs or content based web-sites.
+That changed one morning during a web programming class.
 
-**Here is an example of how I use it to write articles:**
+At around 9 a.m., while I was still trying to come up with a topic for one of our assignments, I noticed a friend working on his own personal website (https://eduard-balamatiuc.com/). He was technically completing the same assignment, but he was not building something only because the university required it. He was creating something useful for himself.
 
-First of all in the directory root I'll create a `content/` for storing content, and then `content/articles/` to store multiple articles. The coolness of this thing (idk if this is strongly about `Astro` or not), is that you can create a `content.config.ts` somewhere and import every article:
+That was the moment the idea clicked.
+
+I decided to treat the website as a personal challenge. It should represent me, my work, and the quality of my craft. My thinking was roughly:
+
+> If this website represents me, I should make it genuinely good.
+
+## Building the website
+
+To give myself some additional motivation, I immediately bought the `max-plamadeala.com` domain.
+
+My logic was simple: I had already spent money on it, so now I had to build something.
+
+I also borrowed my friend’s idea of using [Astro](https://astro.build/). Astro is designed primarily for content-driven websites, which makes it a good choice for personal websites, blogs, and documentation.
+
+One feature I particularly like is Astro’s content collection system.
+
+For example, I keep my articles inside a directory like this:
+
+```text
+content/
+└── articles/
+    ├── first-article.md
+    └── second-article.md
+```
+
+I can then define the structure of an article inside `content.config.ts`:
+
 ```ts
 const articlesCollection = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./content/articles" }),
+  loader: glob({
+    pattern: "**/*.md",
+    base: "./content/articles",
+  }),
   schema: z.object({
     title: z.string(),
     ...
@@ -28,22 +56,40 @@ const articlesCollection = defineCollection({
 });
 
 export const collections = {
-  'articles': articlesCollection,
-  ...
-}; 
+  articles: articlesCollection,
+};
 ```
-Whereas the `loader` loads the glob associated with some extention from the mentioned above directory and then somewhere else you can just do:
+
+The loader finds the Markdown files inside the articles directory, while the schema validates the metadata associated with every article.
+
+After that, retrieving all articles is straightforward:
+
 ```ts
-const allArticles = await getCollection('articles');
+const allArticles = await getCollection("articles");
 ```
-And that's all 💥. You have everything done. Isn't it cool?
 
+That is essentially it. Astro loads and validates the content, and the application can use it to generate article pages, lists, and previews.
 
-> Besides `Astro`, as memory, I used local storage, so the web-site is 100% client-sided, and if you inspect the website and navigate to `Application` -> `LocalStorage`, you'll see every related info stored in there (mainly YOUR starred articles if you have any).
+For a relatively small amount of configuration, you get a clean and structured content system.
 
+The website does not currently have a backend. Features such as starred articles are stored in the browser using `localStorage`.
 
-## Lessons learnt
+This means the site is entirely client-side. When you star an article, that preference is saved only in your browser. You can inspect it through your browser’s developer tools under:
 
-Try to use life struggles or things you don't want to do as opportunities for your personal development.
+```text
+Application → Local Storage
+```
 
-Thanks for the attention, and please do comment or leave feedback in case you want to share your experience or want to correct me on something related to `Astro`.
+This approach would not be appropriate for data that needs to be shared across devices or protected securely. For a simple personal website preference, however, it keeps the architecture lightweight and avoids introducing a backend unnecessarily.
+
+## What I learned
+
+The main lesson was not really about Astro or front-end development.
+
+It was about turning an obligation into something personally useful.
+
+Instead of completing another university assignment and forgetting about it, I used it as an opportunity to build something I could continue improving after the course ended.
+
+Sometimes the easiest way to become motivated is to connect a task you have to do with something you actually care about.
+
+Thanks for reading. Feel free to leave feedback, share your own experience building a personal website, or correct anything I may have misunderstood about Astro.
